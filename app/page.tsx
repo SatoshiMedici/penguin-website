@@ -1,228 +1,205 @@
 export default function Home() {
   return (
-    <main className="min-h-screen">
-      {/* Navigation */}
-      <nav className="fixed w-full z-50 glass">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="text-2xl font-bold gradient-text">THE MARCH</div>
-            <div className="hidden md:flex space-x-8">
-              <a href="#about" className="hover:text-purple-400 transition-colors">About</a>
-              <a href="#roadmap" className="hover:text-purple-400 transition-colors">Roadmap</a>
-              <a href="#faq" className="hover:text-purple-400 transition-colors">FAQ</a>
-            </div>
-            <button className="bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-2 rounded-full hover:from-purple-700 hover:to-indigo-700 transition-all transform hover:scale-105">
-              Connect Wallet
+    <main className="min-h-screen bg-[#0a0a0a] text-white">
+      {/* Simple Header */}
+      <header className="border-b border-gray-800 sticky top-0 bg-[#0a0a0a]/95 backdrop-blur z-50">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+          <h1 className="text-xl font-bold tracking-tight">THE MARCH</h1>
+          <nav className="flex gap-8 text-sm">
+            <a href="#collection" className="hover:text-gray-400 transition">Collection</a>
+            <a href="#details" className="hover:text-gray-400 transition">Details</a>
+            <button className="px-4 py-1.5 bg-white text-black text-xs font-medium rounded hover:bg-gray-200 transition">
+              CONNECT
+            </button>
+          </nav>
+        </div>
+      </header>
+
+      {/* Hero - Minimal */}
+      <section className="max-w-6xl mx-auto px-6 py-20">
+        <div className="max-w-3xl">
+          <p className="text-sm text-gray-500 mb-4 tracking-wide">SUI NETWORK / 3333 SUPPLY</p>
+          <h2 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
+            3333 penguins<br />marching toward<br />greatness.
+          </h2>
+          <p className="text-lg text-gray-400 leading-relaxed mb-8">
+            Inspired by the walking penguin meme. A collection of unique pixel art characters 
+            representing those who take risks, fight for truth, and embrace the hard path. 
+            Built on Sui blockchain with decentralized storage on Walrus.
+          </p>
+          <div className="flex gap-4">
+            <button className="px-6 py-3 bg-white text-black font-medium text-sm hover:bg-gray-200 transition">
+              COMING SOON
+            </button>
+            <button className="px-6 py-3 border border-gray-700 text-sm font-medium hover:border-gray-500 transition">
+              JOIN DISCORD
             </button>
           </div>
         </div>
-      </nav>
+      </section>
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-indigo-900/20"></div>
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="animate-slide-up">
-            <h1 className="text-6xl md:text-8xl font-bold mb-6">
-              THE <span className="gradient-text">MARCH</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              3333 penguins marching toward greatness. A journey of risk-takers, fighters, and those who choose the hard path.
+      {/* Preview Grid */}
+      <section id="collection" className="max-w-6xl mx-auto px-6 py-20 border-t border-gray-800">
+        <h3 className="text-2xl font-bold mb-8">Preview</h3>
+        <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
+          {Array.from({ length: 16 }).map((_, i) => (
+            <div 
+              key={i} 
+              className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 rounded border border-gray-700 hover:border-gray-500 transition cursor-pointer"
+            >
+              <div className="w-full h-full flex items-center justify-center text-gray-600 text-xs">
+                #{i + 1}
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="text-sm text-gray-500 mt-8">Art preview coming soon. Each penguin is unique with varying traits and rarity.</p>
+      </section>
+
+      {/* Collection Details */}
+      <section id="details" className="max-w-6xl mx-auto px-6 py-20 border-t border-gray-800">
+        <div className="grid md:grid-cols-2 gap-16">
+          <div>
+            <h3 className="text-2xl font-bold mb-6">Collection Details</h3>
+            <dl className="space-y-4 text-sm">
+              <div className="flex justify-between border-b border-gray-800 pb-2">
+                <dt className="text-gray-500">Total Supply</dt>
+                <dd className="font-medium">3,333</dd>
+              </div>
+              <div className="flex justify-between border-b border-gray-800 pb-2">
+                <dt className="text-gray-500">Blockchain</dt>
+                <dd className="font-medium">Sui Network</dd>
+              </div>
+              <div className="flex justify-between border-b border-gray-800 pb-2">
+                <dt className="text-gray-500">Storage</dt>
+                <dd className="font-medium">Walrus (Decentralized)</dd>
+              </div>
+              <div className="flex justify-between border-b border-gray-800 pb-2">
+                <dt className="text-gray-500">Art Style</dt>
+                <dd className="font-medium">24×24 Pixel Art</dd>
+              </div>
+              <div className="flex justify-between border-b border-gray-800 pb-2">
+                <dt className="text-gray-500">Smart Contract</dt>
+                <dd className="font-medium">Move Language</dd>
+              </div>
+              <div className="flex justify-between border-b border-gray-800 pb-2">
+                <dt className="text-gray-500">Marketplace</dt>
+                <dd className="font-medium">Sui Kiosk</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div>
+            <h3 className="text-2xl font-bold mb-6">About The March</h3>
+            <div className="space-y-4 text-sm text-gray-400 leading-relaxed">
+              <p>
+                The March is a collection of 3,333 unique penguin characters living on the Sui blockchain. 
+                Each penguin is a 24×24 pixel artwork with algorithmically generated traits.
+              </p>
+              <p>
+                Inspired by the walking penguin meme - a symbol of those who march forward despite 
+                knowing the challenges ahead. These penguins represent risk-takers, truth-seekers, 
+                and individuals who choose the difficult path toward greatness.
+              </p>
+              <p>
+                Built with Sui's Move language for smart contracts and Walrus for truly decentralized 
+                storage. All images and metadata are stored on-chain or in decentralized storage - 
+                no centralized servers.
+              </p>
+              <p>
+                Holders gain access to future utilities including governance rights, token airdrops, 
+                merchandise, and community events.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Roadmap - Simple */}
+      <section className="max-w-6xl mx-auto px-6 py-20 border-t border-gray-800">
+        <h3 className="text-2xl font-bold mb-8">Roadmap</h3>
+        <div className="space-y-8">
+          <div className="flex gap-6">
+            <div className="w-24 flex-shrink-0 text-sm text-gray-500">Phase 1</div>
+            <div>
+              <h4 className="font-bold mb-2">Collection Launch</h4>
+              <p className="text-sm text-gray-400">3,333 penguins on Sui Network. Decentralized storage on Walrus. Community building.</p>
+            </div>
+          </div>
+          <div className="flex gap-6">
+            <div className="w-24 flex-shrink-0 text-sm text-gray-500">Phase 2</div>
+            <div>
+              <h4 className="font-bold mb-2">Marketplace & Utilities</h4>
+              <p className="text-sm text-gray-400">Kiosk marketplace launch. Holder benefits. Merchandise store.</p>
+            </div>
+          </div>
+          <div className="flex gap-6">
+            <div className="w-24 flex-shrink-0 text-sm text-gray-500">Phase 3</div>
+            <div>
+              <h4 className="font-bold mb-2">Physical Products</h4>
+              <p className="text-sm text-gray-400">Figurine line production. Apparel. IRL events for community.</p>
+            </div>
+          </div>
+          <div className="flex gap-6">
+            <div className="w-24 flex-shrink-0 text-sm text-gray-500">Phase 4</div>
+            <div>
+              <h4 className="font-bold mb-2">Token & Governance</h4>
+              <p className="text-sm text-gray-400">Token launch with holder airdrop. Staking rewards. DAO governance.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ - Clean */}
+      <section className="max-w-6xl mx-auto px-6 py-20 border-t border-gray-800">
+        <h3 className="text-2xl font-bold mb-8">FAQ</h3>
+        <div className="space-y-6 max-w-3xl">
+          <div>
+            <h4 className="font-medium mb-2">What is The March?</h4>
+            <p className="text-sm text-gray-400">
+              A collection of 3,333 unique pixel art penguins on Sui blockchain, inspired by the walking 
+              penguin meme representing those who march toward greatness despite challenges.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-              <button className="bg-gradient-to-r from-purple-600 to-indigo-600 px-8 py-4 rounded-full text-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all transform hover:scale-105">
-                Mint Coming Soon
-              </button>
-              <button className="glass px-8 py-4 rounded-full text-lg font-semibold hover:bg-white/10 transition-all">
-                Join Discord
-              </button>
-            </div>
-            
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
-              <div className="glass p-6 rounded-2xl">
-                <div className="text-4xl font-bold gradient-text">3333</div>
-                <div className="text-gray-400 mt-2">Penguins</div>
-              </div>
-              <div className="glass p-6 rounded-2xl">
-                <div className="text-4xl font-bold gradient-text">Sui</div>
-                <div className="text-gray-400 mt-2">Blockchain</div>
-              </div>
-              <div className="glass p-6 rounded-2xl">
-                <div className="text-4xl font-bold gradient-text">100%</div>
-                <div className="text-gray-400 mt-2">Decentralized</div>
-              </div>
-              <div className="glass p-6 rounded-2xl">
-                <div className="text-4xl font-bold gradient-text">∞</div>
-                <div className="text-gray-400 mt-2">Utility</div>
-              </div>
-            </div>
           </div>
-        </div>
-
-        {/* Animated Background Elements */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold mb-6">
-              About <span className="gradient-text">The March</span>
-            </h2>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Inspired by the walking penguin meme, each NFT represents the spirit of those who take risks, fight for truth, and embrace the journey toward greatness.
+          <div>
+            <h4 className="font-medium mb-2">Why Sui Network?</h4>
+            <p className="text-sm text-gray-400">
+              Sui offers parallel execution, low fees, and the Move programming language. We use Walrus 
+              for decentralized storage - making the entire project truly decentralized.
             </p>
           </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="glass p-8 rounded-2xl hover:bg-white/10 transition-all">
-              <div className="text-4xl mb-4">🐧</div>
-              <h3 className="text-2xl font-bold mb-4">Pixel Art</h3>
-              <p className="text-gray-400">
-                CryptoPunks-inspired aesthetic with unique traits and variations. Each penguin is a work of art.
-              </p>
-            </div>
-            
-            <div className="glass p-8 rounded-2xl hover:bg-white/10 transition-all">
-              <div className="text-4xl mb-4">⛓️</div>
-              <h3 className="text-2xl font-bold mb-4">Built on Sui</h3>
-              <p className="text-gray-400">
-                Leveraging Sui's parallel execution and low fees. Storage on Walrus for true decentralization.
-              </p>
-            </div>
-            
-            <div className="glass p-8 rounded-2xl hover:bg-white/10 transition-all">
-              <div className="text-4xl mb-4">🌟</div>
-              <h3 className="text-2xl font-bold mb-4">Community First</h3>
-              <p className="text-gray-400">
-                NFT holders shape the future. Governance, utilities, and rewards for those who march with us.
-              </p>
-            </div>
+          <div>
+            <h4 className="font-medium mb-2">When is the mint?</h4>
+            <p className="text-sm text-gray-400">
+              Mint date to be announced. Join Discord for updates and whitelist opportunities.
+            </p>
           </div>
-        </div>
-      </section>
-
-      {/* Roadmap Section */}
-      <section id="roadmap" className="py-24 relative bg-gradient-to-b from-transparent to-purple-900/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold mb-6">
-              The <span className="gradient-text">Journey</span>
-            </h2>
-            <p className="text-xl text-gray-400">Our roadmap to greatness</p>
+          <div>
+            <h4 className="font-medium mb-2">What do holders get?</h4>
+            <p className="text-sm text-gray-400">
+              Governance rights, token airdrops, staking rewards, merchandise discounts, IRL event access, 
+              and future ecosystem benefits.
+            </p>
           </div>
-
-          <div className="space-y-12">
-            <div className="flex items-start">
-              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center text-xl font-bold mr-6">
-                1
-              </div>
-              <div className="glass p-6 rounded-2xl flex-grow">
-                <h3 className="text-2xl font-bold mb-2">NFT Collection Launch</h3>
-                <p className="text-gray-400">3333 unique penguins on Sui Network with decentralized storage on Walrus</p>
-              </div>
-            </div>
-
-            <div className="flex items-start">
-              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center text-xl font-bold mr-6">
-                2
-              </div>
-              <div className="glass p-6 rounded-2xl flex-grow">
-                <h3 className="text-2xl font-bold mb-2">Community Building</h3>
-                <p className="text-gray-400">Marketplace launch, holder benefits, and community events</p>
-              </div>
-            </div>
-
-            <div className="flex items-start">
-              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center text-xl font-bold mr-6">
-                3
-              </div>
-              <div className="glass p-6 rounded-2xl flex-grow">
-                <h3 className="text-2xl font-bold mb-2">Merch & Physical Products</h3>
-                <p className="text-gray-400">Figurine line, apparel, and IRL events for holders</p>
-              </div>
-            </div>
-
-            <div className="flex items-start">
-              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center text-xl font-bold mr-6">
-                4
-              </div>
-              <div className="glass p-6 rounded-2xl flex-grow">
-                <h3 className="text-2xl font-bold mb-2">Token Launch</h3>
-                <p className="text-gray-400">Airdrop to holders, staking, governance, and ecosystem utilities</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section id="faq" className="py-24 relative">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold mb-6">
-              <span className="gradient-text">FAQ</span>
-            </h2>
-          </div>
-
-          <div className="space-y-6">
-            <details className="glass p-6 rounded-2xl cursor-pointer hover:bg-white/10 transition-all">
-              <summary className="text-xl font-bold cursor-pointer">What is The March?</summary>
-              <p className="mt-4 text-gray-400">
-                The March is a collection of 3333 unique penguin NFTs on the Sui blockchain. Inspired by the walking penguin meme, it represents the journey of risk-takers and fighters marching toward greatness.
-              </p>
-            </details>
-
-            <details className="glass p-6 rounded-2xl cursor-pointer hover:bg-white/10 transition-all">
-              <summary className="text-xl font-bold cursor-pointer">Why Sui blockchain?</summary>
-              <p className="mt-4 text-gray-400">
-                Sui offers parallel execution, low transaction fees, and a developer-friendly Move language. We also use Walrus for decentralized storage, making the entire project truly decentralized.
-              </p>
-            </details>
-
-            <details className="glass p-6 rounded-2xl cursor-pointer hover:bg-white/10 transition-all">
-              <summary className="text-xl font-bold cursor-pointer">When is the mint?</summary>
-              <p className="mt-4 text-gray-400">
-                Mint date will be announced soon. Follow our Discord and Twitter for updates and whitelist opportunities.
-              </p>
-            </details>
-
-            <details className="glass p-6 rounded-2xl cursor-pointer hover:bg-white/10 transition-all">
-              <summary className="text-xl font-bold cursor-pointer">What utilities will holders get?</summary>
-              <p className="mt-4 text-gray-400">
-                Holders will receive: governance rights, token airdrops, staking rewards, merch discounts, IRL event access, and future product benefits. The NFT is your membership to the ecosystem.
-              </p>
-            </details>
-
-            <details className="glass p-6 rounded-2xl cursor-pointer hover:bg-white/10 transition-all">
-              <summary className="text-xl font-bold cursor-pointer">Will there be a token?</summary>
-              <p className="mt-4 text-gray-400">
-                Yes, a token launch is planned after the NFT collection is established. NFT holders will receive significant airdrops and have early access to staking and governance.
-              </p>
-            </details>
+          <div>
+            <h4 className="font-medium mb-2">Is there a token?</h4>
+            <p className="text-sm text-gray-400">
+              Yes, planned after NFT launch. Holders receive airdrops and early staking access.
+            </p>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-2xl font-bold gradient-text mb-4 md:mb-0">
-              THE MARCH
+      <footer className="border-t border-gray-800 mt-20">
+        <div className="max-w-6xl mx-auto px-6 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-sm text-gray-500">© 2026 The March. Built on Sui.</div>
+            <div className="flex gap-6 text-sm">
+              <a href="#" className="text-gray-500 hover:text-white transition">Twitter</a>
+              <a href="#" className="text-gray-500 hover:text-white transition">Discord</a>
+              <a href="#" className="text-gray-500 hover:text-white transition">GitHub</a>
             </div>
-            <div className="flex space-x-6">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">Twitter</a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">Discord</a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">OpenSea</a>
-            </div>
-          </div>
-          <div className="text-center mt-8 text-gray-500 text-sm">
-            © 2026 The March. All rights reserved. Built on Sui.
           </div>
         </div>
       </footer>
