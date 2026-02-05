@@ -6,6 +6,8 @@ import Image from 'next/image';
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [mouseVelocity, setMouseVelocity] = useState({ x: 0, y: 0 });
+  const lastMousePos = useRef({ x: 0, y: 0 });
   const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -23,12 +25,16 @@ export default function Home() {
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (heroRef.current) {
-        const rect = heroRef.current.getBoundingClientRect();
-        const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
-        const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
-        setMousePos({ x, y });
-      }
+      const x = (e.clientX - window.innerWidth / 2) / window.innerWidth;
+      const y = (e.clientY - window.innerHeight / 2) / window.innerHeight;
+
+      // Calculate velocity (how fast the mouse is moving)
+      const vx = (x - lastMousePos.current.x) * 10;
+      const vy = (y - lastMousePos.current.y) * 10;
+
+      lastMousePos.current = { x, y };
+      setMousePos({ x, y });
+      setMouseVelocity({ x: vx, y: vy });
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -54,13 +60,13 @@ export default function Home() {
             scrollY > 50 ? 'text-black' : 'text-white'
           }`}>KRYPTO PENGUS</div>
           <div className="hidden md:flex gap-10 text-base items-center">
-            <a href="#home" className={`opacity-70 hover:opacity-100 transition-all duration-300 ${scrollY > 50 ? 'text-black' : ''}`}>Home</a>
-            <a href="#story" className={`opacity-70 hover:opacity-100 transition-all duration-300 ${scrollY > 50 ? 'text-black' : ''}`}>Story</a>
-            <a href="#mint" className={`opacity-70 hover:opacity-100 transition-all duration-300 ${scrollY > 50 ? 'text-black' : ''}`}>Mint</a>
-            <button className={`text-sm px-6 py-2 min-h-0 h-9 border-2 rounded-lg transition-all duration-300 ${
+            <a href="#home" className={`opacity-70 hover:opacity-100 transition-all duration-300 leading-none ${scrollY > 50 ? 'text-black' : ''}`}>Home</a>
+            <a href="#story" className={`opacity-70 hover:opacity-100 transition-all duration-300 leading-none ${scrollY > 50 ? 'text-black' : ''}`}>Story</a>
+            <a href="#mint" className={`opacity-70 hover:opacity-100 transition-all duration-300 leading-none ${scrollY > 50 ? 'text-black' : ''}`}>Mint</a>
+            <button className={`text-sm px-6 py-1.5 border-2 rounded-lg transition-all duration-300 leading-none flex items-center justify-center ${
               scrollY > 50
                 ? 'border-black text-black hover:bg-black hover:text-white'
-                : 'btn-secondary'
+                : 'border-[#5DD9C1] text-[#5DD9C1] hover:bg-[#5DD9C1] hover:text-black'
             }`}>Connect</button>
           </div>
           <button className={`md:hidden text-2xl transition-colors duration-300 ${scrollY > 50 ? 'text-black' : ''}`}>☰</button>
@@ -69,58 +75,66 @@ export default function Home() {
 
       {/* HERO SECTION - Premium Redesign */}
       <section ref={heroRef} id="home" className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-[#87CEEB] via-[#5DD9C1] to-[#4A90A4] overflow-hidden">
-        {/* Animated floating pixel squares - MORE VISIBLE & REACTIVE */}
+        {/* Animated floating pixel squares - AGGRESSIVE & REACTIVE */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Large glowing orbs */}
+          {/* Large glowing orbs - react to velocity */}
           <div
-            className="absolute w-32 h-32 rounded-full bg-white/40 blur-3xl top-[15%] left-[10%] animate-float-slow"
-            style={{ transform: `translate(${mousePos.x * -30}px, ${mousePos.y * -30}px)` }}
+            className="absolute w-40 h-40 rounded-full bg-white/50 blur-3xl top-[15%] left-[10%] transition-transform duration-150 ease-out"
+            style={{ transform: `translate(${mousePos.x * -80 + mouseVelocity.x * -200}px, ${mousePos.y * -80 + mouseVelocity.y * -200}px)` }}
           ></div>
           <div
-            className="absolute w-48 h-48 rounded-full bg-[#FF8533]/30 blur-3xl top-[60%] right-[10%] animate-float-medium"
-            style={{ transform: `translate(${mousePos.x * -20}px, ${mousePos.y * -20}px)` }}
+            className="absolute w-56 h-56 rounded-full bg-[#FF8533]/40 blur-3xl top-[60%] right-[10%] transition-transform duration-200 ease-out"
+            style={{ transform: `translate(${mousePos.x * -60 + mouseVelocity.x * -150}px, ${mousePos.y * -60 + mouseVelocity.y * -150}px)` }}
+          ></div>
+          <div
+            className="absolute w-32 h-32 rounded-full bg-[#5DD9C1]/30 blur-3xl top-[40%] left-[60%] transition-transform duration-100 ease-out"
+            style={{ transform: `translate(${mousePos.x * -100 + mouseVelocity.x * -250}px, ${mousePos.y * -100 + mouseVelocity.y * -250}px)` }}
           ></div>
 
-          {/* Pixel squares - More visible */}
+          {/* Pixel squares - Aggressive movement based on velocity */}
           <div
-            className="absolute w-6 h-6 bg-white/60 top-[10%] left-[10%] animate-float-slow shadow-lg shadow-white/30"
-            style={{ transform: `translate(${mousePos.x * -40}px, ${mousePos.y * -40}px)` }}
+            className="absolute w-8 h-8 bg-white/70 top-[10%] left-[10%] shadow-lg shadow-white/40 transition-transform duration-75 ease-out"
+            style={{ transform: `translate(${mousePos.x * -120 + mouseVelocity.x * -300}px, ${mousePos.y * -120 + mouseVelocity.y * -300}px) rotate(${mouseVelocity.x * 20}deg)` }}
           ></div>
           <div
-            className="absolute w-8 h-8 bg-white/50 top-[20%] right-[15%] animate-float-medium shadow-lg shadow-white/20"
-            style={{ transform: `translate(${mousePos.x * -50}px, ${mousePos.y * -50}px)` }}
+            className="absolute w-10 h-10 bg-white/60 top-[20%] right-[15%] shadow-lg shadow-white/30 transition-transform duration-100 ease-out"
+            style={{ transform: `translate(${mousePos.x * -150 + mouseVelocity.x * -350}px, ${mousePos.y * -150 + mouseVelocity.y * -350}px) rotate(${mouseVelocity.x * -15}deg)` }}
           ></div>
           <div
-            className="absolute w-4 h-4 bg-[#FF8533]/70 top-[30%] left-[25%] animate-float-fast shadow-lg shadow-orange-500/30"
-            style={{ transform: `translate(${mousePos.x * -60}px, ${mousePos.y * -60}px)` }}
+            className="absolute w-6 h-6 bg-[#FF8533]/80 top-[30%] left-[25%] shadow-lg shadow-orange-500/40 transition-transform duration-50 ease-out"
+            style={{ transform: `translate(${mousePos.x * -180 + mouseVelocity.x * -400}px, ${mousePos.y * -180 + mouseVelocity.y * -400}px) rotate(${mouseVelocity.x * 25}deg)` }}
           ></div>
           <div
-            className="absolute w-10 h-10 bg-white/45 top-[15%] right-[30%] animate-float-slow shadow-lg shadow-white/20"
-            style={{ transform: `translate(${mousePos.x * -35}px, ${mousePos.y * -35}px)` }}
+            className="absolute w-12 h-12 bg-white/55 top-[15%] right-[30%] shadow-lg shadow-white/30 transition-transform duration-125 ease-out"
+            style={{ transform: `translate(${mousePos.x * -100 + mouseVelocity.x * -250}px, ${mousePos.y * -100 + mouseVelocity.y * -250}px) rotate(${mouseVelocity.x * -10}deg)` }}
           ></div>
           <div
-            className="absolute w-5 h-5 bg-[#5DD9C1]/60 top-[40%] left-[5%] animate-float-medium shadow-lg shadow-teal-500/30"
-            style={{ transform: `translate(${mousePos.x * -45}px, ${mousePos.y * -45}px)` }}
+            className="absolute w-7 h-7 bg-[#5DD9C1]/70 top-[40%] left-[5%] shadow-lg shadow-teal-500/40 transition-transform duration-75 ease-out"
+            style={{ transform: `translate(${mousePos.x * -140 + mouseVelocity.x * -320}px, ${mousePos.y * -140 + mouseVelocity.y * -320}px) rotate(${mouseVelocity.x * 18}deg)` }}
           ></div>
           <div
-            className="absolute w-12 h-12 bg-white/40 top-[25%] right-[5%] animate-float-fast shadow-lg shadow-white/20"
-            style={{ transform: `translate(${mousePos.x * -55}px, ${mousePos.y * -55}px)` }}
+            className="absolute w-14 h-14 bg-white/50 top-[25%] right-[5%] shadow-lg shadow-white/25 transition-transform duration-150 ease-out"
+            style={{ transform: `translate(${mousePos.x * -90 + mouseVelocity.x * -200}px, ${mousePos.y * -90 + mouseVelocity.y * -200}px) rotate(${mouseVelocity.x * -12}deg)` }}
           ></div>
           <div
-            className="absolute w-5 h-5 bg-[#FF8533]/50 top-[35%] right-[40%] animate-float-slow shadow-lg shadow-orange-500/20"
-            style={{ transform: `translate(${mousePos.x * -25}px, ${mousePos.y * -25}px)` }}
+            className="absolute w-5 h-5 bg-[#FF8533]/65 top-[35%] right-[40%] shadow-lg shadow-orange-500/30 transition-transform duration-50 ease-out"
+            style={{ transform: `translate(${mousePos.x * -200 + mouseVelocity.x * -450}px, ${mousePos.y * -200 + mouseVelocity.y * -450}px) rotate(${mouseVelocity.x * 30}deg)` }}
           ></div>
           <div
-            className="absolute w-7 h-7 bg-white/55 top-[5%] left-[40%] animate-float-medium shadow-lg shadow-white/25"
-            style={{ transform: `translate(${mousePos.x * -65}px, ${mousePos.y * -65}px)` }}
+            className="absolute w-9 h-9 bg-white/65 top-[5%] left-[40%] shadow-lg shadow-white/35 transition-transform duration-100 ease-out"
+            style={{ transform: `translate(${mousePos.x * -160 + mouseVelocity.x * -380}px, ${mousePos.y * -160 + mouseVelocity.y * -380}px) rotate(${mouseVelocity.x * -20}deg)` }}
           ></div>
           <div
-            className="absolute w-6 h-6 bg-[#2C5F75]/50 top-[50%] right-[20%] animate-float-fast shadow-lg shadow-blue-500/20"
-            style={{ transform: `translate(${mousePos.x * -30}px, ${mousePos.y * -30}px)` }}
+            className="absolute w-8 h-8 bg-[#2C5F75]/60 top-[50%] right-[20%] shadow-lg shadow-blue-500/30 transition-transform duration-75 ease-out"
+            style={{ transform: `translate(${mousePos.x * -130 + mouseVelocity.x * -300}px, ${mousePos.y * -130 + mouseVelocity.y * -300}px) rotate(${mouseVelocity.x * 15}deg)` }}
           ></div>
           <div
-            className="absolute w-4 h-4 bg-white/65 top-[45%] left-[30%] animate-float-slow shadow-lg shadow-white/30"
-            style={{ transform: `translate(${mousePos.x * -70}px, ${mousePos.y * -70}px)` }}
+            className="absolute w-6 h-6 bg-white/75 top-[45%] left-[30%] shadow-lg shadow-white/40 transition-transform duration-50 ease-out"
+            style={{ transform: `translate(${mousePos.x * -220 + mouseVelocity.x * -500}px, ${mousePos.y * -220 + mouseVelocity.y * -500}px) rotate(${mouseVelocity.x * -25}deg)` }}
+          ></div>
+          <div
+            className="absolute w-4 h-4 bg-[#5DD9C1]/80 top-[60%] left-[20%] shadow-lg shadow-teal-500/40 transition-transform duration-50 ease-out"
+            style={{ transform: `translate(${mousePos.x * -250 + mouseVelocity.x * -550}px, ${mousePos.y * -250 + mouseVelocity.y * -550}px) rotate(${mouseVelocity.x * 35}deg)` }}
           ></div>
         </div>
 
@@ -148,8 +162,8 @@ export default function Home() {
         <div className="container mx-auto px-6 py-32 md:py-40 relative z-10 text-center">
           {/* Massive Pixel Penguin Mascot - reactive to mouse */}
           <div
-            className="mb-12 md:mb-16 flex justify-center"
-            style={{ transform: `translate(${mousePos.x * 10}px, ${mousePos.y * 10}px)` }}
+            className="mb-12 md:mb-16 flex justify-center transition-transform duration-150 ease-out"
+            style={{ transform: `translate(${mousePos.x * 30 + mouseVelocity.x * 50}px, ${mousePos.y * 30 + mouseVelocity.y * 50}px)` }}
           >
             <div className="w-72 h-72 md:w-96 md:h-96 lg:w-[400px] lg:h-[400px] border-4 border-black rounded-2xl overflow-hidden animate-breathing relative shadow-2xl shadow-black/30">
               <Image
@@ -187,16 +201,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STORY SECTION - With ambient lighting */}
-      <section id="story" className="bg-[#0A0A0A] py-20 md:py-40 relative overflow-hidden">
-        {/* Ambient glows */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#5DD9C1]/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#FF8533]/10 rounded-full blur-3xl pointer-events-none"></div>
+      {/* STORY SECTION - Blends from hero */}
+      <section id="story" className="relative py-20 md:py-40 overflow-hidden">
+        {/* Gradient background blending from hero */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#4A90A4] via-[#1a3a4a] to-[#0d1f2a]"></div>
+
+        {/* Ambient glows with hero colors */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#5DD9C1]/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute top-1/4 right-0 w-96 h-96 bg-[#87CEEB]/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#FF8533]/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-1/3 left-0 w-72 h-72 bg-[#4A90A4]/20 rounded-full blur-3xl pointer-events-none"></div>
 
         {/* Floating pixels */}
-        <div className="absolute w-3 h-3 bg-[#5DD9C1]/40 top-[20%] left-[5%] animate-float-slow"></div>
-        <div className="absolute w-4 h-4 bg-[#FF8533]/30 top-[60%] right-[8%] animate-float-medium"></div>
-        <div className="absolute w-2 h-2 bg-white/20 top-[40%] left-[90%] animate-float-fast"></div>
+        <div className="absolute w-4 h-4 bg-[#5DD9C1]/50 top-[20%] left-[5%] animate-float-slow"></div>
+        <div className="absolute w-5 h-5 bg-[#FF8533]/40 top-[60%] right-[8%] animate-float-medium"></div>
+        <div className="absolute w-3 h-3 bg-[#87CEEB]/40 top-[40%] left-[90%] animate-float-fast"></div>
+        <div className="absolute w-4 h-4 bg-white/30 top-[80%] left-[15%] animate-float-medium"></div>
 
         <div className="container mx-auto px-6 max-w-4xl text-center relative z-10">
           <h2 className="text-4xl md:text-6xl font-bold mb-16 md:mb-20 text-[#5DD9C1] fade-in">
@@ -237,15 +257,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* COLLECTION GALLERY - With ambient lighting */}
-      <section id="collection" className="bg-[#0A0A0A] py-20 md:py-40 border-t border-gray-800 relative overflow-hidden">
-        {/* Ambient glows */}
-        <div className="absolute top-1/3 right-0 w-72 h-72 bg-[#5DD9C1]/8 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-[#FF8533]/8 rounded-full blur-3xl pointer-events-none"></div>
+      {/* COLLECTION GALLERY - Seamless flow */}
+      <section id="collection" className="relative py-20 md:py-40 overflow-hidden">
+        {/* Gradient background continuing the flow */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0d1f2a] via-[#0a1620] to-[#0d1a24]"></div>
+
+        {/* Ambient glows with hero palette */}
+        <div className="absolute top-0 left-1/3 w-80 h-80 bg-[#4A90A4]/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute top-1/3 right-0 w-96 h-96 bg-[#5DD9C1]/12 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-1/4 left-0 w-72 h-72 bg-[#FF8533]/12 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#87CEEB]/10 rounded-full blur-3xl pointer-events-none"></div>
 
         {/* Floating pixels */}
-        <div className="absolute w-3 h-3 bg-[#5DD9C1]/30 top-[10%] right-[15%] animate-float-medium"></div>
-        <div className="absolute w-2 h-2 bg-white/15 top-[70%] left-[10%] animate-float-slow"></div>
+        <div className="absolute w-4 h-4 bg-[#5DD9C1]/40 top-[10%] right-[15%] animate-float-medium"></div>
+        <div className="absolute w-3 h-3 bg-[#87CEEB]/30 top-[70%] left-[10%] animate-float-slow"></div>
+        <div className="absolute w-3 h-3 bg-[#FF8533]/35 top-[50%] right-[5%] animate-float-fast"></div>
 
         <div className="container mx-auto px-6 relative z-10">
           <h2 className="text-center text-4xl md:text-6xl font-bold mb-6 text-[#5DD9C1] fade-in">
@@ -281,16 +307,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* MINT INTERFACE - With ambient lighting */}
-      <section id="mint" className="bg-[#0A0A0A] py-20 md:py-40 border-t border-gray-800 relative overflow-hidden">
-        {/* Ambient glows */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#5DD9C1]/5 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute top-0 right-1/4 w-48 h-48 bg-[#FF8533]/10 rounded-full blur-3xl pointer-events-none"></div>
+      {/* MINT INTERFACE - Seamless flow */}
+      <section id="mint" className="relative py-20 md:py-40 overflow-hidden">
+        {/* Gradient background continuing the flow */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0d1a24] via-[#0f1c28] to-[#0a1520]"></div>
+
+        {/* Central glow effect */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#5DD9C1]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        {/* Ambient glows with hero palette */}
+        <div className="absolute top-0 left-0 w-96 h-96 bg-[#4A90A4]/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute top-0 right-1/4 w-64 h-64 bg-[#FF8533]/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-[#87CEEB]/12 rounded-full blur-3xl pointer-events-none"></div>
 
         {/* Floating pixels */}
-        <div className="absolute w-4 h-4 bg-[#5DD9C1]/35 top-[15%] left-[10%] animate-float-slow"></div>
-        <div className="absolute w-3 h-3 bg-[#FF8533]/30 bottom-[20%] right-[12%] animate-float-medium"></div>
-        <div className="absolute w-2 h-2 bg-white/20 top-[60%] left-[85%] animate-float-fast"></div>
+        <div className="absolute w-5 h-5 bg-[#5DD9C1]/45 top-[15%] left-[10%] animate-float-slow"></div>
+        <div className="absolute w-4 h-4 bg-[#FF8533]/40 bottom-[20%] right-[12%] animate-float-medium"></div>
+        <div className="absolute w-3 h-3 bg-[#87CEEB]/35 top-[60%] left-[85%] animate-float-fast"></div>
+        <div className="absolute w-3 h-3 bg-white/25 top-[30%] right-[8%] animate-float-slow"></div>
 
         <div className="container mx-auto px-6 relative z-10">
           <h2 className="text-center text-4xl md:text-6xl font-bold mb-16 md:mb-20 text-[#5DD9C1] fade-in">
@@ -350,15 +384,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* COMMUNITY SECTION - With ambient lighting */}
-      <section id="community" className="bg-[#0A0A0A] py-20 md:py-40 border-t border-gray-800 relative overflow-hidden">
-        {/* Ambient glows */}
-        <div className="absolute top-0 left-1/3 w-72 h-72 bg-[#5DD9C1]/8 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-0 right-1/3 w-64 h-64 bg-[#FF8533]/8 rounded-full blur-3xl pointer-events-none"></div>
+      {/* COMMUNITY SECTION - Seamless flow */}
+      <section id="community" className="relative py-20 md:py-40 overflow-hidden">
+        {/* Gradient background continuing the flow */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a1520] via-[#0c1822] to-[#081018]"></div>
+
+        {/* Ambient glows with hero palette */}
+        <div className="absolute top-0 left-1/3 w-96 h-96 bg-[#5DD9C1]/12 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute top-1/2 right-0 w-80 h-80 bg-[#4A90A4]/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/3 w-72 h-72 bg-[#FF8533]/12 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-[#87CEEB]/10 rounded-full blur-3xl pointer-events-none"></div>
 
         {/* Floating pixels */}
-        <div className="absolute w-3 h-3 bg-[#5DD9C1]/35 top-[25%] right-[20%] animate-float-slow"></div>
-        <div className="absolute w-4 h-4 bg-[#FF8533]/25 bottom-[30%] left-[15%] animate-float-medium"></div>
+        <div className="absolute w-4 h-4 bg-[#5DD9C1]/45 top-[25%] right-[20%] animate-float-slow"></div>
+        <div className="absolute w-5 h-5 bg-[#FF8533]/35 bottom-[30%] left-[15%] animate-float-medium"></div>
+        <div className="absolute w-3 h-3 bg-[#87CEEB]/30 top-[60%] left-[5%] animate-float-fast"></div>
 
         <div className="container mx-auto px-6 text-center relative z-10">
           <h2 className="text-4xl md:text-6xl font-bold mb-16 md:mb-20 text-[#5DD9C1] fade-in">
@@ -405,10 +445,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-black border-t border-gray-800 py-16 relative overflow-hidden">
-        {/* Subtle ambient glow */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-32 bg-[#5DD9C1]/5 rounded-full blur-3xl pointer-events-none"></div>
+      {/* Footer - Seamless ending */}
+      <footer className="relative py-16 overflow-hidden">
+        {/* Gradient background blending to dark */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#081018] to-[#050a0f]"></div>
+
+        {/* Subtle ambient glows */}
+        <div className="absolute top-0 left-1/4 w-64 h-32 bg-[#5DD9C1]/8 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-32 bg-[#4A90A4]/10 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="container mx-auto px-6 text-center relative z-10">
           <div className="text-2xl md:text-3xl font-bold mb-6">KRYPTO PENGUS</div>
