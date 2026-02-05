@@ -100,21 +100,116 @@ Instant reveal (metadata + images revealed immediately upon mint)
 
 ## Current Phase: Website Design (Phase 1)
 
+### Required Pages/Sections
+
+1. **HERO SECTION**
+   - Animated pixelated penguin character (main mascot)
+   - Parallax scrolling mountain backdrop (layers moving at different speeds)
+   - Bold headline with persistence narrative
+   - Primary CTA: "Mint Now" button (when live) or "Join Waitlist"
+   - Tagline emphasizing the journey/mountain metaphor
+
+2. **STORY SECTION**
+   - The narrative of the solitary penguin
+   - "Never giving up" theme
+   - Visual storytelling with parallax or scroll-triggered animations
+
+3. **COLLECTION GALLERY**
+   - Grid layout showcasing NFT examples
+   - Hover interactions (pixelated glitch effects)
+   - Trait rarity preview
+   - Filter by traits (optional but recommended)
+   - Smooth animations on scroll
+
+4. **MINT INTERFACE**
+   - Clean, simple minting widget
+   - Connect wallet (Sui wallet integration)
+   - Display current tier, price, and supply remaining
+   - Quantity selector (respecting wallet limits)
+   - Live mint counter
+   - Transaction confirmation feedback
+
+5. **COMMUNITY/SOCIAL**
+   - Links to X (@KryptoPengus), Discord, Instagram
+
+### Interactive Features
+
+**Animation & Effects:**
+- Parallax scrolling (mountains/icebergs at different speeds)
+- Hover animations on NFT previews (pixel glitch, color shifts)
+- Smooth scroll-triggered animations (fade-in, slide-in)
+- Animated pixel art transitions between sections
+- Live mint counter with real-time updates
+- Pixel-art loading states
+
+**Performance:**
+- Lazy loading for images
+- Optimized asset compression
+- Fast page load (<2 seconds)
+- Smooth 60fps animations
+- Efficient JavaScript
+
+**Mobile Responsiveness:**
+- Mobile-first approach
+- Touch-friendly interactions
+- Optimized layouts for all screen sizes
+- Performance maintained on mobile
+
+**Accessibility:**
+- WCAG 2.1 AA compliance
+- Keyboard navigation support
+- Screen reader friendly
+- Semantic HTML
+- Alt text for all images
+- High contrast ratios
+
+### Development Workflow
+
+**PHASE 1: Design Mockups** ⚠️ APPROVAL GATE
+- Create visual mockups for all sections
+- Show typography system implementation
+- Demonstrate color palette usage
+- Include interactive element previews
+- Present layout options
+- **STOP FOR APPROVAL BEFORE CODING**
+
+**PHASE 2: Implement Website** (After Approval)
+- Build responsive HTML/CSS/JavaScript
+- Implement interactive features and animations
+- Optimize for performance
+- Ensure mobile responsiveness
+- Add accessibility features
+- Integrate placeholder minting interface
+
+**PHASE 3: Testing & Refinement**
+- Cross-browser testing (Chrome, Firefox, Safari, Edge)
+- Mobile device testing (iOS, Android)
+- Performance auditing (Lighthouse scores)
+- Accessibility testing (WCAG compliance)
+
+**PHASE 4: Local Deployment**
+- Set up local development environment
+- Document how to run locally
+- Provide instructions for public deployment
+
 ### Status
 - [x] Initial Next.js project structure
 - [x] Basic landing page layout
+- [x] PROJECT_STATUS.md created
+- [x] BRAND_GUIDELINES.md created
+- [ ] TODO.md created
+- [ ] Design mockups (pending approval)
 - [ ] Brand guidelines implementation
 - [ ] Krypto Pengus branding update
+- [ ] Full website development
 - [ ] Mint page design
 - [ ] Wallet integration (Sui)
 
 ### Next Steps
-1. Update website with Krypto Pengus branding
-2. Implement brand color palette and typography
-3. Design mint page with tier-based mechanics
-4. Integrate Sui wallet connection
-5. Add NFT preview gallery
-6. Optimize for static export to Walrus Sites
+1. Create TODO.md with prioritized tasks
+2. Ask clarifying questions before mockups
+3. Create design mockups for approval
+4. Await approval before implementation
 
 ---
 
