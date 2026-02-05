@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
-import PixelPenguin from './components/PixelPenguin';
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
@@ -152,11 +151,13 @@ export default function Home() {
             className="mb-12 md:mb-16 flex justify-center"
             style={{ transform: `translate(${mousePos.x * 10}px, ${mousePos.y * 10}px)` }}
           >
-            <div className="w-72 h-72 md:w-96 md:h-96 lg:w-[400px] lg:h-[400px] border-4 border-black rounded-2xl overflow-hidden relative shadow-2xl shadow-black/30">
-              <PixelPenguin
-                mouseX={mousePos.x}
-                mouseY={mousePos.y}
-                className="w-full h-full"
+            <div className="w-72 h-72 md:w-96 md:h-96 lg:w-[400px] lg:h-[400px] border-4 border-black rounded-2xl overflow-hidden animate-breathing relative shadow-2xl shadow-black/30">
+              <Image
+                src="/hero-penguin.png"
+                alt="Krypto Pengus Hero"
+                fill
+                className="object-cover"
+                priority
               />
             </div>
           </div>
