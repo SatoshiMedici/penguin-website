@@ -29,25 +29,52 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Ultra-Minimal Navigation */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#0A0A0A]/98 backdrop-blur-md border-b border-[rgba(93,217,193,0.15)]">
+      <header className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b transition-all duration-300 ${
+        scrollY > 50
+          ? 'bg-[#FF8533] border-[#FF8533]/50'
+          : 'bg-[#0A0A0A]/98 border-[rgba(93,217,193,0.15)]'
+      }`}>
         <nav className="container mx-auto px-6 md:px-20 h-18 md:h-20 flex justify-between items-center">
-          <div className="text-lg md:text-xl font-bold tracking-tight">KRYPTO PENGUS</div>
+          <div className={`text-lg md:text-xl font-bold tracking-tight transition-colors duration-300 ${
+            scrollY > 50 ? 'text-black' : 'text-white'
+          }`}>KRYPTO PENGUS</div>
           <div className="hidden md:flex gap-10 text-base items-center">
-            <a href="#home" className="opacity-70 hover:opacity-100 transition-opacity duration-300">Home</a>
-            <a href="#story" className="opacity-70 hover:opacity-100 transition-opacity duration-300">Story</a>
-            <a href="#mint" className="opacity-70 hover:opacity-100 transition-opacity duration-300">Mint</a>
-            <button className="btn-secondary text-sm px-6 py-2 min-h-0 h-9">Connect</button>
+            <a href="#home" className={`opacity-70 hover:opacity-100 transition-all duration-300 ${scrollY > 50 ? 'text-black' : ''}`}>Home</a>
+            <a href="#story" className={`opacity-70 hover:opacity-100 transition-all duration-300 ${scrollY > 50 ? 'text-black' : ''}`}>Story</a>
+            <a href="#mint" className={`opacity-70 hover:opacity-100 transition-all duration-300 ${scrollY > 50 ? 'text-black' : ''}`}>Mint</a>
+            <button className={`text-sm px-6 py-2 min-h-0 h-9 border-2 rounded-lg transition-all duration-300 ${
+              scrollY > 50
+                ? 'border-black text-black hover:bg-black hover:text-white'
+                : 'btn-secondary'
+            }`}>Connect</button>
           </div>
-          <button className="md:hidden text-2xl">☰</button>
+          <button className={`md:hidden text-2xl transition-colors duration-300 ${scrollY > 50 ? 'text-black' : ''}`}>☰</button>
         </nav>
       </header>
 
       {/* HERO SECTION - Premium Redesign */}
-      <section id="home" className="relative min-h-screen flex items-center justify-center bg-[#5DD9C1] overflow-hidden">
-        {/* Subtle mountain backdrop (10% opacity, static) */}
-        <div className="absolute inset-0 pointer-events-none opacity-5">
-          <svg viewBox="0 0 1440 320" className="absolute bottom-0 w-full">
-            <path fill="#2C5F75" d="M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,149.3C672,139,768,149,864,165.3C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+      <section id="home" className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-[#87CEEB] via-[#5DD9C1] to-[#4A90A4] overflow-hidden">
+        {/* Animated floating pixel squares */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute w-4 h-4 bg-white/20 top-[10%] left-[10%] animate-float-slow"></div>
+          <div className="absolute w-6 h-6 bg-white/15 top-[20%] right-[15%] animate-float-medium"></div>
+          <div className="absolute w-3 h-3 bg-white/25 top-[30%] left-[25%] animate-float-fast"></div>
+          <div className="absolute w-5 h-5 bg-white/10 top-[15%] right-[30%] animate-float-slow"></div>
+          <div className="absolute w-4 h-4 bg-white/20 top-[40%] left-[5%] animate-float-medium"></div>
+          <div className="absolute w-8 h-8 bg-white/10 top-[25%] right-[5%] animate-float-fast"></div>
+          <div className="absolute w-3 h-3 bg-white/30 top-[35%] right-[40%] animate-float-slow"></div>
+          <div className="absolute w-5 h-5 bg-white/15 top-[5%] left-[40%] animate-float-medium"></div>
+        </div>
+
+        {/* Pixel iceberg mountains */}
+        <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
+          {/* Back layer - darker */}
+          <svg viewBox="0 0 1440 200" className="absolute bottom-0 w-full opacity-30">
+            <polygon fill="#2C5F75" points="0,200 100,100 200,150 300,80 400,120 500,60 600,100 700,40 800,90 900,50 1000,80 1100,30 1200,70 1300,100 1440,50 1440,200" />
+          </svg>
+          {/* Front layer - lighter */}
+          <svg viewBox="0 0 1440 150" className="absolute bottom-0 w-full opacity-50">
+            <polygon fill="#FFFFFF" points="0,150 150,80 250,120 400,60 550,100 700,40 850,90 1000,50 1150,80 1300,40 1440,70 1440,150" />
           </svg>
         </div>
 
@@ -294,9 +321,36 @@ export default function Home() {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.02); }
         }
-        
+
         .animate-breathing {
           animation: breathing 3s ease-in-out infinite;
+        }
+
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes float-medium {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-30px) rotate(-5deg); }
+        }
+
+        @keyframes float-fast {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-15px) rotate(3deg); }
+        }
+
+        .animate-float-slow {
+          animation: float-slow 6s ease-in-out infinite;
+        }
+
+        .animate-float-medium {
+          animation: float-medium 4s ease-in-out infinite;
+        }
+
+        .animate-float-fast {
+          animation: float-fast 3s ease-in-out infinite;
         }
       `}</style>
     </main>
