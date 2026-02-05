@@ -11,9 +11,10 @@
   --color-white: #FFFFFF;
   --color-orange: #FF8533;
   --color-dark-bg: #0A0A0A;
-  
+
   /* Typography */
   --font-primary: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-pixel: var(--font-pixel), 'Press Start 2P', monospace;
   
   /* Spacing (16px base) - UPGRADED */
   --space-xs: 16px;
@@ -140,8 +141,9 @@ body {
 
 /* Typography - UPGRADED */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  line-height: 1.1;
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  line-height: 1.3;
   letter-spacing: 0.02em;
 }
 

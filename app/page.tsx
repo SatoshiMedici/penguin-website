@@ -55,8 +55,14 @@ export default function Home() {
         <div className="container mx-auto px-6 py-32 md:py-40 relative z-10 text-center">
           {/* Massive Pixel Penguin Mascot */}
           <div className="mb-12 md:mb-16 flex justify-center">
-            <div className="w-72 h-72 md:w-96 md:h-96 lg:w-[400px] lg:h-[400px] bg-white/20 border-4 border-black rounded-2xl flex items-center justify-center backdrop-blur-sm animate-breathing">
-              <div className="text-8xl md:text-9xl">🐧</div>
+            <div className="w-72 h-72 md:w-96 md:h-96 lg:w-[400px] lg:h-[400px] border-4 border-black rounded-2xl overflow-hidden animate-breathing relative">
+              <Image
+                src="/hero-penguin.png"
+                alt="Krypto Pengus Hero"
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
           </div>
 
