@@ -1,15 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
-      
+
       // Fade-in animations
       const fadeElements = document.querySelectorAll('.fade-in');
       fadeElements.forEach((el) => {
@@ -20,10 +22,23 @@ export default function Home() {
       });
     };
 
+    const handleMouseMove = (e: MouseEvent) => {
+      if (heroRef.current) {
+        const rect = heroRef.current.getBoundingClientRect();
+        const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
+        const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
+        setMousePos({ x, y });
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('mousemove', handleMouseMove);
     handleScroll();
-    
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
 
   return (
@@ -53,36 +68,90 @@ export default function Home() {
       </header>
 
       {/* HERO SECTION - Premium Redesign */}
-      <section id="home" className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-[#87CEEB] via-[#5DD9C1] to-[#4A90A4] overflow-hidden">
-        {/* Animated floating pixel squares */}
+      <section ref={heroRef} id="home" className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-[#87CEEB] via-[#5DD9C1] to-[#4A90A4] overflow-hidden">
+        {/* Animated floating pixel squares - MORE VISIBLE & REACTIVE */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute w-4 h-4 bg-white/20 top-[10%] left-[10%] animate-float-slow"></div>
-          <div className="absolute w-6 h-6 bg-white/15 top-[20%] right-[15%] animate-float-medium"></div>
-          <div className="absolute w-3 h-3 bg-white/25 top-[30%] left-[25%] animate-float-fast"></div>
-          <div className="absolute w-5 h-5 bg-white/10 top-[15%] right-[30%] animate-float-slow"></div>
-          <div className="absolute w-4 h-4 bg-white/20 top-[40%] left-[5%] animate-float-medium"></div>
-          <div className="absolute w-8 h-8 bg-white/10 top-[25%] right-[5%] animate-float-fast"></div>
-          <div className="absolute w-3 h-3 bg-white/30 top-[35%] right-[40%] animate-float-slow"></div>
-          <div className="absolute w-5 h-5 bg-white/15 top-[5%] left-[40%] animate-float-medium"></div>
+          {/* Large glowing orbs */}
+          <div
+            className="absolute w-32 h-32 rounded-full bg-white/40 blur-3xl top-[15%] left-[10%] animate-float-slow"
+            style={{ transform: `translate(${mousePos.x * -30}px, ${mousePos.y * -30}px)` }}
+          ></div>
+          <div
+            className="absolute w-48 h-48 rounded-full bg-[#FF8533]/30 blur-3xl top-[60%] right-[10%] animate-float-medium"
+            style={{ transform: `translate(${mousePos.x * -20}px, ${mousePos.y * -20}px)` }}
+          ></div>
+
+          {/* Pixel squares - More visible */}
+          <div
+            className="absolute w-6 h-6 bg-white/60 top-[10%] left-[10%] animate-float-slow shadow-lg shadow-white/30"
+            style={{ transform: `translate(${mousePos.x * -40}px, ${mousePos.y * -40}px)` }}
+          ></div>
+          <div
+            className="absolute w-8 h-8 bg-white/50 top-[20%] right-[15%] animate-float-medium shadow-lg shadow-white/20"
+            style={{ transform: `translate(${mousePos.x * -50}px, ${mousePos.y * -50}px)` }}
+          ></div>
+          <div
+            className="absolute w-4 h-4 bg-[#FF8533]/70 top-[30%] left-[25%] animate-float-fast shadow-lg shadow-orange-500/30"
+            style={{ transform: `translate(${mousePos.x * -60}px, ${mousePos.y * -60}px)` }}
+          ></div>
+          <div
+            className="absolute w-10 h-10 bg-white/45 top-[15%] right-[30%] animate-float-slow shadow-lg shadow-white/20"
+            style={{ transform: `translate(${mousePos.x * -35}px, ${mousePos.y * -35}px)` }}
+          ></div>
+          <div
+            className="absolute w-5 h-5 bg-[#5DD9C1]/60 top-[40%] left-[5%] animate-float-medium shadow-lg shadow-teal-500/30"
+            style={{ transform: `translate(${mousePos.x * -45}px, ${mousePos.y * -45}px)` }}
+          ></div>
+          <div
+            className="absolute w-12 h-12 bg-white/40 top-[25%] right-[5%] animate-float-fast shadow-lg shadow-white/20"
+            style={{ transform: `translate(${mousePos.x * -55}px, ${mousePos.y * -55}px)` }}
+          ></div>
+          <div
+            className="absolute w-5 h-5 bg-[#FF8533]/50 top-[35%] right-[40%] animate-float-slow shadow-lg shadow-orange-500/20"
+            style={{ transform: `translate(${mousePos.x * -25}px, ${mousePos.y * -25}px)` }}
+          ></div>
+          <div
+            className="absolute w-7 h-7 bg-white/55 top-[5%] left-[40%] animate-float-medium shadow-lg shadow-white/25"
+            style={{ transform: `translate(${mousePos.x * -65}px, ${mousePos.y * -65}px)` }}
+          ></div>
+          <div
+            className="absolute w-6 h-6 bg-[#2C5F75]/50 top-[50%] right-[20%] animate-float-fast shadow-lg shadow-blue-500/20"
+            style={{ transform: `translate(${mousePos.x * -30}px, ${mousePos.y * -30}px)` }}
+          ></div>
+          <div
+            className="absolute w-4 h-4 bg-white/65 top-[45%] left-[30%] animate-float-slow shadow-lg shadow-white/30"
+            style={{ transform: `translate(${mousePos.x * -70}px, ${mousePos.y * -70}px)` }}
+          ></div>
         </div>
 
-        {/* Pixel iceberg mountains */}
+        {/* Pixel iceberg mountains - parallax on scroll */}
         <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
-          {/* Back layer - darker */}
-          <svg viewBox="0 0 1440 200" className="absolute bottom-0 w-full opacity-30">
+          {/* Back layer - darker, moves slower */}
+          <svg
+            viewBox="0 0 1440 200"
+            className="absolute bottom-0 w-full opacity-40"
+            style={{ transform: `translateY(${scrollY * 0.1}px)` }}
+          >
             <polygon fill="#2C5F75" points="0,200 100,100 200,150 300,80 400,120 500,60 600,100 700,40 800,90 900,50 1000,80 1100,30 1200,70 1300,100 1440,50 1440,200" />
           </svg>
-          {/* Front layer - lighter */}
-          <svg viewBox="0 0 1440 150" className="absolute bottom-0 w-full opacity-50">
+          {/* Front layer - lighter, moves faster */}
+          <svg
+            viewBox="0 0 1440 150"
+            className="absolute bottom-0 w-full opacity-70"
+            style={{ transform: `translateY(${scrollY * 0.05}px)` }}
+          >
             <polygon fill="#FFFFFF" points="0,150 150,80 250,120 400,60 550,100 700,40 850,90 1000,50 1150,80 1300,40 1440,70 1440,150" />
           </svg>
         </div>
 
         {/* Hero Content */}
         <div className="container mx-auto px-6 py-32 md:py-40 relative z-10 text-center">
-          {/* Massive Pixel Penguin Mascot */}
-          <div className="mb-12 md:mb-16 flex justify-center">
-            <div className="w-72 h-72 md:w-96 md:h-96 lg:w-[400px] lg:h-[400px] border-4 border-black rounded-2xl overflow-hidden animate-breathing relative">
+          {/* Massive Pixel Penguin Mascot - reactive to mouse */}
+          <div
+            className="mb-12 md:mb-16 flex justify-center"
+            style={{ transform: `translate(${mousePos.x * 10}px, ${mousePos.y * 10}px)` }}
+          >
+            <div className="w-72 h-72 md:w-96 md:h-96 lg:w-[400px] lg:h-[400px] border-4 border-black rounded-2xl overflow-hidden animate-breathing relative shadow-2xl shadow-black/30">
               <Image
                 src="/hero-penguin.png"
                 alt="Krypto Pengus Hero"
@@ -93,16 +162,16 @@ export default function Home() {
             </div>
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold mb-8 uppercase tracking-tight text-black">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold mb-8 uppercase tracking-tight text-black drop-shadow-lg">
             KRYPTO<br className="md:hidden" /> PENGUS
           </h1>
-          
+
           <p className="text-xl md:text-2xl mb-16 text-black/90 tracking-wide max-w-3xl mx-auto" style={{ letterSpacing: '0.1em' }}>
             Never Give Up. Never Stop Marching.
           </p>
 
           <div className="flex justify-center mb-20">
-            <a href="#mint" className="btn-primary text-lg px-16 min-w-[280px]">
+            <a href="#mint" className="btn-primary text-lg px-16 min-w-[280px] shadow-xl shadow-orange-500/30 hover:shadow-orange-500/50 transition-shadow">
               MINT NOW
             </a>
           </div>
@@ -118,9 +187,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STORY SECTION - Simplified & Centered */}
-      <section id="story" className="bg-[#0A0A0A] py-20 md:py-40">
-        <div className="container mx-auto px-6 max-w-4xl text-center">
+      {/* STORY SECTION - With ambient lighting */}
+      <section id="story" className="bg-[#0A0A0A] py-20 md:py-40 relative overflow-hidden">
+        {/* Ambient glows */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#5DD9C1]/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#FF8533]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        {/* Floating pixels */}
+        <div className="absolute w-3 h-3 bg-[#5DD9C1]/40 top-[20%] left-[5%] animate-float-slow"></div>
+        <div className="absolute w-4 h-4 bg-[#FF8533]/30 top-[60%] right-[8%] animate-float-medium"></div>
+        <div className="absolute w-2 h-2 bg-white/20 top-[40%] left-[90%] animate-float-fast"></div>
+
+        <div className="container mx-auto px-6 max-w-4xl text-center relative z-10">
           <h2 className="text-4xl md:text-6xl font-bold mb-16 md:mb-20 text-[#5DD9C1] fade-in">
             THE MARCH
           </h2>
@@ -130,7 +208,7 @@ export default function Home() {
               In the frozen wilderness, one penguin stands alone.
             </p>
             <p>
-              Not because it's lost. Not because it's weak.
+              Not because it&apos;s lost. Not because it&apos;s weak.
             </p>
             <p>
               But because it chose the harder path.
@@ -142,7 +220,7 @@ export default function Home() {
 
           {/* Story Illustration */}
           <div className="mb-16 md:mb-20 fade-in flex justify-center">
-            <div className="w-full max-w-2xl aspect-[3/2] bg-gradient-to-br from-[#4A90A4] to-[#2C5F75] rounded-2xl border-3 border-[#5DD9C1] flex items-center justify-center">
+            <div className="w-full max-w-2xl aspect-[3/2] bg-gradient-to-br from-[#4A90A4] to-[#2C5F75] rounded-2xl border-3 border-[#5DD9C1] flex items-center justify-center shadow-2xl shadow-[#5DD9C1]/20">
               <div className="text-7xl md:text-9xl">🐧🏔️</div>
             </div>
           </div>
@@ -153,15 +231,23 @@ export default function Home() {
             </p>
           </div>
 
-          <p className="text-3xl md:text-5xl font-bold text-[#FF8533] fade-in">
+          <p className="text-3xl md:text-5xl font-bold text-[#FF8533] fade-in drop-shadow-lg">
             NEVER. GIVE. UP.
           </p>
         </div>
       </section>
 
-      {/* COLLECTION GALLERY - Premium Grid */}
-      <section id="collection" className="bg-[#0A0A0A] py-20 md:py-40 border-t border-gray-800">
-        <div className="container mx-auto px-6">
+      {/* COLLECTION GALLERY - With ambient lighting */}
+      <section id="collection" className="bg-[#0A0A0A] py-20 md:py-40 border-t border-gray-800 relative overflow-hidden">
+        {/* Ambient glows */}
+        <div className="absolute top-1/3 right-0 w-72 h-72 bg-[#5DD9C1]/8 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-[#FF8533]/8 rounded-full blur-3xl pointer-events-none"></div>
+
+        {/* Floating pixels */}
+        <div className="absolute w-3 h-3 bg-[#5DD9C1]/30 top-[10%] right-[15%] animate-float-medium"></div>
+        <div className="absolute w-2 h-2 bg-white/15 top-[70%] left-[10%] animate-float-slow"></div>
+
+        <div className="container mx-auto px-6 relative z-10">
           <h2 className="text-center text-4xl md:text-6xl font-bold mb-6 text-[#5DD9C1] fade-in">
             THE COLLECTION
           </h2>
@@ -171,9 +257,9 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 max-w-6xl mx-auto mb-16">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-              <div 
+              <div
                 key={num}
-                className="card cursor-pointer fade-in aspect-square relative overflow-hidden group"
+                className="card cursor-pointer fade-in aspect-square relative overflow-hidden group hover:shadow-xl hover:shadow-[#5DD9C1]/20"
               >
                 <Image
                   src={`/nft-${num}.jpg`}
@@ -190,24 +276,33 @@ export default function Home() {
           </div>
 
           <div className="text-center fade-in">
-            <button className="btn-secondary px-12 py-4">VIEW ALL 3,333</button>
+            <button className="btn-secondary px-12 py-4 hover:shadow-lg hover:shadow-[#5DD9C1]/20 transition-shadow">VIEW ALL 3,333</button>
           </div>
         </div>
       </section>
 
-      {/* MINT INTERFACE - Premium Card */}
-      <section id="mint" className="bg-[#0A0A0A] py-20 md:py-40 border-t border-gray-800">
-        <div className="container mx-auto px-6">
+      {/* MINT INTERFACE - With ambient lighting */}
+      <section id="mint" className="bg-[#0A0A0A] py-20 md:py-40 border-t border-gray-800 relative overflow-hidden">
+        {/* Ambient glows */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#5DD9C1]/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute top-0 right-1/4 w-48 h-48 bg-[#FF8533]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        {/* Floating pixels */}
+        <div className="absolute w-4 h-4 bg-[#5DD9C1]/35 top-[15%] left-[10%] animate-float-slow"></div>
+        <div className="absolute w-3 h-3 bg-[#FF8533]/30 bottom-[20%] right-[12%] animate-float-medium"></div>
+        <div className="absolute w-2 h-2 bg-white/20 top-[60%] left-[85%] animate-float-fast"></div>
+
+        <div className="container mx-auto px-6 relative z-10">
           <h2 className="text-center text-4xl md:text-6xl font-bold mb-16 md:mb-20 text-[#5DD9C1] fade-in">
             MINT YOUR PENGUIN
           </h2>
 
           <div className="max-w-2xl mx-auto">
-            <div className="card p-10 md:p-16 space-y-10 fade-in bg-[rgba(93,217,193,0.03)]">
+            <div className="card p-10 md:p-16 space-y-10 fade-in bg-[rgba(93,217,193,0.03)] hover:shadow-2xl hover:shadow-[#5DD9C1]/10 transition-shadow duration-500">
               {/* Tier Display */}
               <div className="text-center space-y-4">
                 <div className="text-2xl md:text-3xl font-bold">WHITELIST MINT LIVE</div>
-                <div className="text-4xl md:text-5xl font-bold text-[#5DD9C1]">10 SUI</div>
+                <div className="text-4xl md:text-5xl font-bold text-[#5DD9C1] drop-shadow-lg">10 SUI</div>
                 <div className="text-base opacity-70">per NFT</div>
                 <div className="text-sm opacity-60">847 / 1,000 Remaining</div>
               </div>
@@ -217,9 +312,9 @@ export default function Home() {
               {/* Quantity Selector */}
               <div>
                 <div className="flex items-center justify-center gap-6 mb-4">
-                  <button className="w-16 h-16 border-3 border-[#5DD9C1] rounded-xl hover:bg-[#5DD9C1] hover:text-black transition-all duration-300 text-2xl font-bold">-</button>
+                  <button className="w-16 h-16 border-3 border-[#5DD9C1] rounded-xl hover:bg-[#5DD9C1] hover:text-black transition-all duration-300 text-2xl font-bold hover:shadow-lg hover:shadow-[#5DD9C1]/30">-</button>
                   <div className="text-4xl font-bold w-20 text-center">1</div>
-                  <button className="w-16 h-16 border-3 border-[#5DD9C1] rounded-xl hover:bg-[#5DD9C1] hover:text-black transition-all duration-300 text-2xl font-bold">+</button>
+                  <button className="w-16 h-16 border-3 border-[#5DD9C1] rounded-xl hover:bg-[#5DD9C1] hover:text-black transition-all duration-300 text-2xl font-bold hover:shadow-lg hover:shadow-[#5DD9C1]/30">+</button>
                 </div>
                 <div className="text-center text-sm opacity-60">(Max: 3 per wallet)</div>
               </div>
@@ -231,7 +326,7 @@ export default function Home() {
               </div>
 
               {/* Mint Button */}
-              <button className="btn-primary w-full text-center justify-center py-6 text-xl">
+              <button className="btn-primary w-full text-center justify-center py-6 text-xl shadow-xl shadow-orange-500/30 hover:shadow-orange-500/50 transition-shadow">
                 MINT NOW
               </button>
 
@@ -248,53 +343,61 @@ export default function Home() {
                 <span>64.7%</span>
               </div>
               <div className="h-8 bg-[rgba(93,217,193,0.1)] rounded-full overflow-hidden">
-                <div className="h-full bg-[#5DD9C1] rounded-full transition-all duration-1000" style={{ width: '64.7%' }}></div>
+                <div className="h-full bg-gradient-to-r from-[#5DD9C1] to-[#4A90A4] rounded-full transition-all duration-1000 shadow-lg shadow-[#5DD9C1]/30" style={{ width: '64.7%' }}></div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* COMMUNITY SECTION - Clean Icons */}
-      <section id="community" className="bg-[#0A0A0A] py-20 md:py-40 border-t border-gray-800">
-        <div className="container mx-auto px-6 text-center">
+      {/* COMMUNITY SECTION - With ambient lighting */}
+      <section id="community" className="bg-[#0A0A0A] py-20 md:py-40 border-t border-gray-800 relative overflow-hidden">
+        {/* Ambient glows */}
+        <div className="absolute top-0 left-1/3 w-72 h-72 bg-[#5DD9C1]/8 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/3 w-64 h-64 bg-[#FF8533]/8 rounded-full blur-3xl pointer-events-none"></div>
+
+        {/* Floating pixels */}
+        <div className="absolute w-3 h-3 bg-[#5DD9C1]/35 top-[25%] right-[20%] animate-float-slow"></div>
+        <div className="absolute w-4 h-4 bg-[#FF8533]/25 bottom-[30%] left-[15%] animate-float-medium"></div>
+
+        <div className="container mx-auto px-6 text-center relative z-10">
           <h2 className="text-4xl md:text-6xl font-bold mb-16 md:mb-20 text-[#5DD9C1] fade-in">
             JOIN THE MARCH
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8 md:gap-10 max-w-4xl mx-auto">
             {/* X/Twitter */}
-            <a 
-              href="https://x.com/KryptoPengus" 
-              target="_blank" 
+            <a
+              href="https://x.com/KryptoPengus"
+              target="_blank"
               rel="noopener noreferrer"
-              className="card p-12 hover:scale-105 transition-all duration-400 fade-in group"
+              className="card p-12 hover:scale-105 transition-all duration-400 fade-in group hover:shadow-xl hover:shadow-[#5DD9C1]/20"
             >
-              <div className="text-7xl mb-6 text-[#5DD9C1]">𝕏</div>
+              <div className="text-7xl mb-6 text-[#5DD9C1] group-hover:scale-110 transition-transform">𝕏</div>
               <div className="text-xl font-bold mb-2">@KryptoPengus</div>
               <div className="text-base opacity-70">Follow us on X</div>
             </a>
 
             {/* Discord */}
-            <a 
-              href="https://discord.gg/kryptopengus" 
-              target="_blank" 
+            <a
+              href="https://discord.gg/kryptopengus"
+              target="_blank"
               rel="noopener noreferrer"
-              className="card p-12 hover:scale-105 transition-all duration-400 fade-in group"
+              className="card p-12 hover:scale-105 transition-all duration-400 fade-in group hover:shadow-xl hover:shadow-[#5DD9C1]/20"
             >
-              <div className="text-7xl mb-6 text-[#5DD9C1]">💬</div>
+              <div className="text-7xl mb-6 text-[#5DD9C1] group-hover:scale-110 transition-transform">💬</div>
               <div className="text-xl font-bold mb-2">Discord</div>
               <div className="text-base opacity-70">Join the server</div>
             </a>
 
             {/* Instagram */}
-            <a 
-              href="https://instagram.com/kryptopengus" 
-              target="_blank" 
+            <a
+              href="https://instagram.com/kryptopengus"
+              target="_blank"
               rel="noopener noreferrer"
-              className="card p-12 hover:scale-105 transition-all duration-400 fade-in group"
+              className="card p-12 hover:scale-105 transition-all duration-400 fade-in group hover:shadow-xl hover:shadow-[#5DD9C1]/20"
             >
-              <div className="text-7xl mb-6 text-[#5DD9C1]">📸</div>
+              <div className="text-7xl mb-6 text-[#5DD9C1] group-hover:scale-110 transition-transform">📸</div>
               <div className="text-xl font-bold mb-2">Instagram</div>
               <div className="text-base opacity-70">Follow us</div>
             </a>
@@ -303,14 +406,17 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-black border-t border-gray-800 py-16">
-        <div className="container mx-auto px-6 text-center">
+      <footer className="bg-black border-t border-gray-800 py-16 relative overflow-hidden">
+        {/* Subtle ambient glow */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-32 bg-[#5DD9C1]/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div className="container mx-auto px-6 text-center relative z-10">
           <div className="text-2xl md:text-3xl font-bold mb-6">KRYPTO PENGUS</div>
           <p className="opacity-60 mb-8 text-lg">Never Give Up. Never Stop Marching.</p>
           <div className="flex justify-center gap-8 mb-8 text-base">
-            <a href="https://x.com/KryptoPengus" target="_blank" rel="noopener noreferrer" className="opacity-60 hover:opacity-100 transition">X</a>
-            <a href="https://discord.gg/kryptopengus" target="_blank" rel="noopener noreferrer" className="opacity-60 hover:opacity-100 transition">Discord</a>
-            <a href="https://instagram.com/kryptopengus" target="_blank" rel="noopener noreferrer" className="opacity-60 hover:opacity-100 transition">Instagram</a>
+            <a href="https://x.com/KryptoPengus" target="_blank" rel="noopener noreferrer" className="opacity-60 hover:opacity-100 hover:text-[#5DD9C1] transition">X</a>
+            <a href="https://discord.gg/kryptopengus" target="_blank" rel="noopener noreferrer" className="opacity-60 hover:opacity-100 hover:text-[#5DD9C1] transition">Discord</a>
+            <a href="https://instagram.com/kryptopengus" target="_blank" rel="noopener noreferrer" className="opacity-60 hover:opacity-100 hover:text-[#5DD9C1] transition">Instagram</a>
           </div>
           <p className="text-sm opacity-40">© 2026 Krypto Pengus. Built on Sui Network.</p>
         </div>
@@ -327,18 +433,18 @@ export default function Home() {
         }
 
         @keyframes float-slow {
-          0%, 100% { transform: translateY(0) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(5deg); }
+          0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+          50% { transform: translateY(-25px) rotate(5deg); opacity: 1; }
         }
 
         @keyframes float-medium {
-          0%, 100% { transform: translateY(0) rotate(0deg); }
-          50% { transform: translateY(-30px) rotate(-5deg); }
+          0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.5; }
+          50% { transform: translateY(-35px) rotate(-5deg); opacity: 0.9; }
         }
 
         @keyframes float-fast {
-          0%, 100% { transform: translateY(0) rotate(0deg); }
-          50% { transform: translateY(-15px) rotate(3deg); }
+          0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
+          50% { transform: translateY(-20px) rotate(3deg); opacity: 0.8; }
         }
 
         .animate-float-slow {
