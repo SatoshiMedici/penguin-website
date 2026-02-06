@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import { SocialLinks } from '@/components/ui/social-links';
+import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
 
 // Snowflake component for reusable snow particles
 const Snowflake = ({ style, size, parallaxMultiplier, smoothMouse }: {
@@ -119,6 +120,22 @@ export default function Home() {
           HERO SECTION - Sky & Mountains
           ═══════════════════════════════════════════════════════════════ */}
       <section id="home" className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-[#87CEEB] via-[#7EC8E3] to-[#6ECFCF] overflow-hidden">
+        {/* Aurora Borealis Effect - Subtle animated gradient */}
+        <BackgroundGradientAnimation
+          gradientBackgroundStart="rgb(135, 206, 235)"
+          gradientBackgroundEnd="rgb(110, 207, 207)"
+          firstColor="135, 206, 235"
+          secondColor="93, 217, 193"
+          thirdColor="74, 144, 164"
+          fourthColor="255, 133, 51"
+          fifthColor="200, 230, 255"
+          pointerColor="93, 217, 193"
+          size="100%"
+          blendingValue="soft-light"
+          interactive={false}
+          containerClassName="opacity-30"
+        />
+
         {/* Floating elements - smooth parallax */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {/* Soft glowing orbs */}
