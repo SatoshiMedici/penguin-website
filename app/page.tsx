@@ -2,9 +2,10 @@
 
 import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
+import Lenis from 'lenis';
 import { SocialLinks } from '@/components/ui/social-links';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
-import { Boxes } from '@/components/ui/background-boxes';
+import { ZoomParallax } from '@/components/ui/zoom-parallax';
 
 // Snowflake component for reusable snow particles
 const Snowflake = ({ style, size, parallaxMultiplier, smoothMouse }: {
@@ -51,6 +52,15 @@ export default function Home() {
   const animationRef = useRef<number>();
 
   useEffect(() => {
+    // Initialize Lenis smooth scrolling
+    const lenis = new Lenis();
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
     const handleScroll = () => {
       setScrollY(window.scrollY);
 
@@ -85,6 +95,7 @@ export default function Home() {
     animationRef.current = requestAnimationFrame(animate);
 
     return () => {
+      lenis.destroy();
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
@@ -327,48 +338,52 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          COLLECTION SECTION - Interactive Grid Gallery
-          Hover over boxes to light them up - NFTs scattered throughout
+          COLLECTION SECTION - Zoom Parallax Gallery
+          Scroll to zoom through the penguin collection
           ═══════════════════════════════════════════════════════════════ */}
-      <section id="collection" className="relative">
-        {/* Gradient transition from story section */}
-        <div className="h-32 bg-gradient-to-b from-[#6ECFCF] to-[#1a3a4a]" />
-
-        {/* Interactive grid gallery */}
-        <div className="relative h-[80vh] w-full overflow-hidden bg-[#1a3a4a] flex flex-col items-center justify-center">
-          {/* Radial mask for smooth fade effect */}
-          <div className="absolute inset-0 w-full h-full bg-[#1a3a4a] z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
-
-          {/* Interactive boxes with NFT images */}
-          <Boxes
-            images={[
-              '/nft-1.jpg',
-              '/nft-2.jpg',
-              '/nft-3.jpg',
-              '/nft-4.jpg',
-              '/nft-5.jpg',
-              '/nft-6.jpg',
-              '/nft-7.jpg',
-              '/nft-8.jpg',
-              '/nft-9.jpg',
-              '/nft-10.jpg',
-            ]}
+      <section id="collection" className="relative bg-gradient-to-b from-[#6ECFCF] via-[#7EC8E3] to-[#87CEEB]">
+        {/* Section Header */}
+        <div className="relative flex h-[50vh] items-center justify-center">
+          {/* Radial spotlight effect */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-1/2 left-1/2 h-[120vmin] w-[120vmin] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.3),transparent_50%)] blur-[30px]"
           />
 
-          {/* Section Header */}
-          <h2 className="text-4xl md:text-6xl font-bold mb-4 text-white relative z-20 drop-shadow-[0_4px_20px_rgba(93,217,193,0.4)]">
-            THE COLLECTION
-          </h2>
-          <p className="text-lg md:text-xl text-[#5DD9C1]/80 relative z-20 text-center max-w-md">
-            3,333 unique pixel penguins on Sui
-          </p>
-          <p className="text-sm text-white/40 mt-4 relative z-20">
-            Hover to explore
-          </p>
+          {/* Floating elements */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <div className="absolute w-64 h-64 rounded-full bg-white/20 blur-3xl top-[20%] left-[10%]" style={{ transform: `translate(${smoothMouse.x * -15}px, ${smoothMouse.y * -15}px)` }} />
+            <div className="absolute w-48 h-48 rounded-full bg-[#5DD9C1]/20 blur-3xl top-[40%] right-[15%]" style={{ transform: `translate(${smoothMouse.x * -20}px, ${smoothMouse.y * -20}px)` }} />
+          </div>
+
+          <div className="text-center relative z-10">
+            <h2 className="text-4xl md:text-6xl font-bold mb-4 text-[#2C5F75] drop-shadow-lg">
+              THE COLLECTION
+            </h2>
+            <p className="text-lg md:text-xl text-[#3D6B7D] mb-4">
+              3,333 unique pixel penguins on Sui
+            </p>
+            <p className="text-sm text-[#4A90A4]">
+              Scroll to explore
+            </p>
+          </div>
         </div>
 
-        {/* Gradient transition to mint section */}
-        <div className="h-32 bg-gradient-to-b from-[#1a3a4a] to-[#87CEEB]" />
+        {/* Zoom Parallax Gallery */}
+        <ZoomParallax
+          images={[
+            { src: '/nft-1.jpg', alt: 'Krypto Pengus NFT #1' },
+            { src: '/nft-2.jpg', alt: 'Krypto Pengus NFT #2' },
+            { src: '/nft-3.jpg', alt: 'Krypto Pengus NFT #3' },
+            { src: '/nft-4.jpg', alt: 'Krypto Pengus NFT #4' },
+            { src: '/nft-5.jpg', alt: 'Krypto Pengus NFT #5' },
+            { src: '/nft-6.jpg', alt: 'Krypto Pengus NFT #6' },
+            { src: '/nft-7.jpg', alt: 'Krypto Pengus NFT #7' },
+          ]}
+        />
+
+        {/* Spacer after gallery */}
+        <div className="h-[30vh]" />
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
