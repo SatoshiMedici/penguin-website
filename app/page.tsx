@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { SocialLinks } from '@/components/ui/social-links';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
 import { ZoomParallax } from '@/components/ui/zoom-parallax';
+import { DottedSurface } from '@/components/ui/dotted-surface';
 
 // Snowflake component for reusable snow particles
 const Snowflake = ({ style, size, parallaxMultiplier, smoothMouse }: {
@@ -328,57 +329,52 @@ export default function Home() {
 
       {/* ═══════════════════════════════════════════════════════════════
           COLLECTION SECTION - Zoom Parallax Gallery
-          Zooms into penguin and transitions to mint section
-          Void/space background for floating effect
+          Icy wave background with floating penguin NFTs
           ═══════════════════════════════════════════════════════════════ */}
       <section id="collection" className="relative">
-        {/* Gradient transition from story section into void */}
-        <div className="h-40 bg-gradient-to-b from-[#6ECFCF] to-[#0a0a12]" />
+        {/* Gradient transition from story section */}
+        <div className="h-32 bg-gradient-to-b from-[#6ECFCF] to-[#1a3a4a]" />
 
-        {/* Void background with subtle stars */}
-        <div className="relative bg-[#0a0a12]">
-          {/* Subtle star field effect */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute w-1 h-1 bg-white/30 rounded-full top-[10%] left-[15%]" />
-            <div className="absolute w-0.5 h-0.5 bg-white/20 rounded-full top-[25%] left-[45%]" />
-            <div className="absolute w-1 h-1 bg-white/25 rounded-full top-[15%] right-[20%]" />
-            <div className="absolute w-0.5 h-0.5 bg-white/15 rounded-full top-[40%] left-[10%]" />
-            <div className="absolute w-1 h-1 bg-white/20 rounded-full top-[35%] right-[35%]" />
-            <div className="absolute w-0.5 h-0.5 bg-white/25 rounded-full top-[50%] left-[60%]" />
-            <div className="absolute w-1 h-1 bg-white/15 rounded-full top-[60%] left-[25%]" />
-            <div className="absolute w-0.5 h-0.5 bg-white/30 rounded-full top-[70%] right-[15%]" />
-            <div className="absolute w-1 h-1 bg-white/20 rounded-full top-[80%] left-[40%]" />
-            <div className="absolute w-0.5 h-0.5 bg-white/25 rounded-full top-[85%] right-[50%]" />
-            {/* Subtle nebula glow */}
-            <div className="absolute w-[600px] h-[600px] rounded-full bg-[#5DD9C1]/5 blur-[120px] top-[20%] left-[10%]" />
-            <div className="absolute w-[500px] h-[500px] rounded-full bg-[#FF8533]/5 blur-[100px] top-[50%] right-[15%]" />
-          </div>
+        {/* Icy ocean background with Three.js dotted wave surface */}
+        <div className="relative overflow-hidden">
+          {/* Three.js Dotted Wave Surface - Icy Theme */}
+          <DottedSurface
+            bgColor="#1a3a4a"
+            dotColor={[93, 217, 193]}
+            fogColor={0x1a3a4a}
+            className="z-0"
+          />
+
+          {/* Overlay gradient for depth */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#1a3a4a]/30 to-[#1a3a4a]/60 pointer-events-none z-[1]" />
 
           {/* Section Header */}
           <div className="text-center pt-20 pb-10 relative z-10">
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white fade-in drop-shadow-lg">THE COLLECTION</h2>
-            <p className="text-lg md:text-xl text-white/60 fade-in">3,333 unique pixel penguins on Sui</p>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white fade-in drop-shadow-[0_4px_20px_rgba(93,217,193,0.3)]">THE COLLECTION</h2>
+            <p className="text-lg md:text-xl text-[#5DD9C1]/80 fade-in">3,333 unique pixel penguins on Sui</p>
           </div>
 
           {/* Zoom Parallax Gallery */}
-          <ZoomParallax
-            images={[
-              { src: '/nft-1.jpg', alt: 'Krypto Pengus Pixel Art NFT - Sui Network Collection' },
-              { src: '/nft-2.jpg', alt: 'Krypto Pengus Rare Pixel Art NFT - Digital Collectible' },
-              { src: '/nft-3.jpg', alt: 'Krypto Pengus Unique NFT - Pixel Art Penguin' },
-              { src: '/nft-4.jpg', alt: 'Krypto Pengus NFT Art - Blockchain Collectible' },
-              { src: '/nft-5.jpg', alt: 'Krypto Pengus Limited Edition Pixel Art NFT' },
-              { src: '/nft-6.jpg', alt: 'Krypto Pengus Exclusive NFT - Sui Blockchain' },
-              { src: '/nft-7.jpg', alt: 'Krypto Pengus Premium Pixel Art NFT Collection' },
-              { src: '/nft-8.jpg', alt: 'Krypto Pengus Legendary Pixel Art NFT' },
-              { src: '/nft-9.jpg', alt: 'Krypto Pengus Epic NFT - Sui Network' },
-              { src: '/nft-10.jpg', alt: 'Krypto Pengus Ultra Rare Pixel Art NFT' },
-            ]}
-          />
+          <div className="relative z-10">
+            <ZoomParallax
+              images={[
+                { src: '/nft-1.jpg', alt: 'Krypto Pengus Pixel Art NFT - Sui Network Collection' },
+                { src: '/nft-2.jpg', alt: 'Krypto Pengus Rare Pixel Art NFT - Digital Collectible' },
+                { src: '/nft-3.jpg', alt: 'Krypto Pengus Unique NFT - Pixel Art Penguin' },
+                { src: '/nft-4.jpg', alt: 'Krypto Pengus NFT Art - Blockchain Collectible' },
+                { src: '/nft-5.jpg', alt: 'Krypto Pengus Limited Edition Pixel Art NFT' },
+                { src: '/nft-6.jpg', alt: 'Krypto Pengus Exclusive NFT - Sui Blockchain' },
+                { src: '/nft-7.jpg', alt: 'Krypto Pengus Premium Pixel Art NFT Collection' },
+                { src: '/nft-8.jpg', alt: 'Krypto Pengus Legendary Pixel Art NFT' },
+                { src: '/nft-9.jpg', alt: 'Krypto Pengus Epic NFT - Sui Network' },
+                { src: '/nft-10.jpg', alt: 'Krypto Pengus Ultra Rare Pixel Art NFT' },
+              ]}
+            />
+          </div>
         </div>
 
-        {/* Gradient transition from void back to light for mint section */}
-        <div className="h-40 bg-gradient-to-b from-[#0a0a12] to-[#87CEEB]" />
+        {/* Gradient transition to mint section */}
+        <div className="h-32 bg-gradient-to-b from-[#1a3a4a] to-[#87CEEB]" />
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════

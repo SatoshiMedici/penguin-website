@@ -9,7 +9,6 @@ interface Image {
 }
 
 interface ZoomParallaxProps {
-  /** Array of images to be displayed in the parallax effect - supports up to 10 images */
   images: Image[];
   className?: string;
 }
@@ -26,51 +25,60 @@ export function ZoomParallax({ images, className }: ZoomParallaxProps) {
   const scale6 = useTransform(scrollYProgress, [0, 1], [1, 6]);
   const scale7 = useTransform(scrollYProgress, [0, 1], [1, 7]);
   const scale8 = useTransform(scrollYProgress, [0, 1], [1, 8]);
-  const scale9 = useTransform(scrollYProgress, [0, 1], [1, 9]);
-  const scale10 = useTransform(scrollYProgress, [0, 1], [1, 10]);
 
-  // Varied scales for depth - center image scales less, outer images scale more
-  const scales = [scale4, scale6, scale5, scale7, scale5, scale8, scale6, scale9, scale7, scale10];
-
-  // Positioning classes for each image - spread out to avoid overlapping
-  const getPositionClass = (index: number) => {
-    switch (index) {
-      // Center image (main focus)
-      case 0: return '[&>div]:!h-[28vh] [&>div]:!w-[28vw]';
-      // Top row - spread across
-      case 1: return '[&>div]:!-top-[32vh] [&>div]:!-left-[28vw] [&>div]:!h-[22vh] [&>div]:!w-[22vw]';
-      case 2: return '[&>div]:!-top-[35vh] [&>div]:!left-[2vw] [&>div]:!h-[20vh] [&>div]:!w-[20vw]';
-      case 3: return '[&>div]:!-top-[30vh] [&>div]:!left-[30vw] [&>div]:!h-[18vh] [&>div]:!w-[18vw]';
-      // Middle row - left and right sides
-      case 4: return '[&>div]:!top-[5vh] [&>div]:!-left-[38vw] [&>div]:!h-[20vh] [&>div]:!w-[20vw]';
-      case 5: return '[&>div]:!top-[0vh] [&>div]:!left-[38vw] [&>div]:!h-[18vh] [&>div]:!w-[18vw]';
-      // Bottom row - spread across
-      case 6: return '[&>div]:!top-[32vh] [&>div]:!-left-[30vw] [&>div]:!h-[18vh] [&>div]:!w-[18vw]';
-      case 7: return '[&>div]:!top-[35vh] [&>div]:!left-[0vw] [&>div]:!h-[16vh] [&>div]:!w-[16vw]';
-      case 8: return '[&>div]:!top-[30vh] [&>div]:!left-[28vw] [&>div]:!h-[20vh] [&>div]:!w-[20vw]';
-      // Extra corners
-      case 9: return '[&>div]:!top-[38vh] [&>div]:!left-[40vw] [&>div]:!h-[14vh] [&>div]:!w-[14vw]';
-      default: return '';
-    }
-  };
+  // Image configurations: position, size, and scale
+  const imageConfigs = [
+    // Center - main focus (largest, slowest zoom)
+    { top: '50%', left: '50%', w: '25vw', h: '25vw', scale: scale4, translate: '-50%, -50%' },
+    // Top left
+    { top: '20%', left: '15%', w: '18vw', h: '18vw', scale: scale6, translate: '-50%, -50%' },
+    // Top right
+    { top: '15%', left: '80%', w: '16vw', h: '16vw', scale: scale5, translate: '-50%, -50%' },
+    // Middle left
+    { top: '50%', left: '8%', w: '14vw', h: '14vw', scale: scale7, translate: '-50%, -50%' },
+    // Middle right
+    { top: '45%', left: '88%', w: '15vw', h: '15vw', scale: scale6, translate: '-50%, -50%' },
+    // Bottom left
+    { top: '80%', left: '20%', w: '16vw', h: '16vw', scale: scale8, translate: '-50%, -50%' },
+    // Bottom right
+    { top: '85%', left: '75%', w: '14vw', h: '14vw', scale: scale7, translate: '-50%, -50%' },
+    // Top center
+    { top: '8%', left: '45%', w: '12vw', h: '12vw', scale: scale8, translate: '-50%, -50%' },
+    // Bottom center
+    { top: '88%', left: '50%', w: '13vw', h: '13vw', scale: scale6, translate: '-50%, -50%' },
+    // Far left middle-bottom
+    { top: '70%', left: '5%', w: '11vw', h: '11vw', scale: scale8, translate: '-50%, -50%' },
+  ];
 
   return (
     <div ref={container} className={`relative h-[300vh] ${className || ''}`}>
       <div className="sticky top-0 h-screen overflow-hidden">
-        {images.map(({ src, alt }, index) => {
-          const scale = scales[index % scales.length];
+        {images.slice(0, 10).map(({ src, alt }, index) => {
+          const config = imageConfigs[index];
+          if (!config) return null;
 
           return (
             <motion.div
               key={index}
-              style={{ scale }}
-              className={`absolute top-0 flex h-full w-full items-center justify-center ${getPositionClass(index)}`}
+              style={{
+                scale: config.scale,
+                position: 'absolute',
+                top: config.top,
+                left: config.left,
+                transform: `translate(${config.translate})`,
+              }}
+              className="flex items-center justify-center"
             >
-              <div className="relative h-[25vh] w-[25vw]">
+              <div
+                style={{
+                  width: config.w,
+                  height: config.h,
+                }}
+              >
                 <img
                   src={src || '/placeholder.svg'}
-                  alt={alt || `Parallax image ${index + 1}`}
-                  className="h-full w-full object-cover rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]"
+                  alt={alt || `Penguin NFT ${index + 1}`}
+                  className="h-full w-full object-cover rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)]"
                 />
               </div>
             </motion.div>
