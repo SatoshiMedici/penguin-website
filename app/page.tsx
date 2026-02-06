@@ -325,7 +325,6 @@ export default function Home() {
             <p>Each footprint in the snow is a decision. Each breath, a test of resolve.</p>
           </div>
 
-          <p className="text-[#2C5F75] font-semibold text-lg md:text-xl mb-4 fade-in">There are 3,333 penguins. And 3,333 journeys.</p>
           <p className="text-[#1A3A4A] text-base md:text-lg fade-in">No two are the same. But all begin with the courage to move forward.</p>
         </div>
 
