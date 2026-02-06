@@ -1,520 +1,769 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useRef } from 'react';
-import Image from 'next/image';
-import Lenis from 'lenis';
-import { SocialLinks } from '@/components/ui/social-links';
-import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
-import { ZoomParallax } from '@/components/ui/zoom-parallax';
-import { FlipWords } from '@/components/ui/flip-words';
+import { useRef, useEffect, useState } from "react";
+import {
+  motion,
+  useInView,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import { FlipWords } from "@/components/ui/flip-words";
 
-// Snowflake component for reusable snow particles
-const Snowflake = ({ style, size, parallaxMultiplier, smoothMouse }: {
-  style: React.CSSProperties;
-  size: number;
-  parallaxMultiplier: number;
-  smoothMouse: { x: number; y: number };
-}) => (
-  <div
-    className="absolute rounded-full bg-white/70 shadow-sm shadow-white/50"
-    style={{
-      ...style,
-      width: size,
-      height: size,
-      transform: `translate(${smoothMouse.x * parallaxMultiplier}px, ${smoothMouse.y * parallaxMultiplier}px)`,
-    }}
-  />
-);
-
-// Ice Crystal component
-const IceCrystal = ({ className, parallaxMultiplier, smoothMouse, opacity = 0.3 }: {
-  className: string;
-  parallaxMultiplier: number;
-  smoothMouse: { x: number; y: number };
-  opacity?: number;
-}) => (
-  <svg
-    className={`absolute ${className}`}
-    viewBox="0 0 40 60"
-    style={{
-      transform: `translate(${smoothMouse.x * parallaxMultiplier}px, ${smoothMouse.y * parallaxMultiplier}px)`,
-      opacity
-    }}
-  >
-    <polygon fill="#FFFFFF" points="20,0 30,20 25,60 15,60 10,20" />
-    <polygon fill="#E8F4F8" points="20,0 10,20 15,60 20,30" />
-  </svg>
-);
-
-export default function Home() {
-  const [scrollY, setScrollY] = useState(0);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [smoothMouse, setSmoothMouse] = useState({ x: 0, y: 0 });
-  const animationRef = useRef<number>();
+/* ─── Animated counter ─── */
+function Counter({
+  value,
+  suffix = "",
+  prefix = "",
+  decimals = 0,
+}: {
+  value: number;
+  suffix?: string;
+  prefix?: string;
+  decimals?: number;
+}) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   useEffect(() => {
-    // Initialize Lenis smooth scrolling
-    const lenis = new Lenis();
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-
-      // Fade-in animations
-      const fadeElements = document.querySelectorAll('.fade-in');
-      fadeElements.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.85) {
-          el.classList.add('visible');
-        }
-      });
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX - window.innerWidth / 2) / window.innerWidth;
-      const y = (e.clientY - window.innerHeight / 2) / window.innerHeight;
-      setMousePos({ x, y });
-    };
-
-    // Smooth lerping animation for buttery movement
-    const animate = () => {
-      setSmoothMouse(prev => ({
-        x: prev.x + (mousePos.x - prev.x) * 0.08,
-        y: prev.y + (mousePos.y - prev.y) * 0.08
-      }));
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('mousemove', handleMouseMove);
-    handleScroll();
-    animationRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      lenis.destroy();
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
-    };
-  }, [mousePos]);
+    if (!isInView) return;
+    const steps = 50;
+    const increment = value / steps;
+    let current = 0;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= value) {
+        setCount(value);
+        clearInterval(timer);
+      } else {
+        setCount(
+          decimals > 0
+            ? Number(current.toFixed(decimals))
+            : Math.floor(current)
+        );
+      }
+    }, 30);
+    return () => clearInterval(timer);
+  }, [isInView, value, decimals]);
 
   return (
-    <main className="min-h-screen bg-[#87CEEB]">
-      {/* Navigation - Transparent initially */}
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrollY > 50
-          ? 'bg-[#FF8533] backdrop-blur-md shadow-lg'
-          : 'bg-transparent'
-      }`}>
-        <nav className="container mx-auto px-6 md:px-20 h-16 md:h-20 flex justify-between items-center">
-          <div className={`text-lg md:text-xl font-bold tracking-tight transition-colors duration-300 ${
-            scrollY > 50 ? 'text-black' : 'text-white drop-shadow-md'
-          }`}>KRYPTO PENGUS</div>
-          <div className="hidden md:flex gap-10 text-base items-center">
-            <a href="#home" className={`hover:opacity-100 transition-all duration-300 ${scrollY > 50 ? 'text-black opacity-70' : 'text-white opacity-90 drop-shadow-md'}`}>Home</a>
-            <a href="#story" className={`hover:opacity-100 transition-all duration-300 ${scrollY > 50 ? 'text-black opacity-70' : 'text-white opacity-90 drop-shadow-md'}`}>Story</a>
-            <a href="#mint" className={`hover:opacity-100 transition-all duration-300 ${scrollY > 50 ? 'text-black opacity-70' : 'text-white opacity-90 drop-shadow-md'}`}>Mint</a>
-            <button className={`text-sm px-6 py-2 border-2 rounded-lg transition-all duration-300 ${
-              scrollY > 50
-                ? 'border-black text-black hover:bg-black hover:text-white'
-                : 'border-white text-white hover:bg-white hover:text-[#87CEEB] drop-shadow-md'
-            }`}>Connect</button>
-          </div>
-          <button className={`md:hidden text-2xl transition-colors duration-300 ${scrollY > 50 ? 'text-black' : 'text-white drop-shadow-md'}`}>☰</button>
-        </nav>
-      </header>
+    <span ref={ref}>
+      {prefix}
+      {decimals > 0 ? count.toFixed(decimals) : count}
+      {suffix}
+    </span>
+  );
+}
 
-      {/* ═══════════════════════════════════════════════════════════════
-          HERO SECTION - Sky & Mountains
-          ═══════════════════════════════════════════════════════════════ */}
-      <section id="home" className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-[#87CEEB] via-[#7EC8E3] to-[#6ECFCF] overflow-hidden">
-        {/* Aurora Borealis Effect - Animated gradient */}
-        <BackgroundGradientAnimation
-          gradientBackgroundStart="rgb(135, 206, 235)"
-          gradientBackgroundEnd="rgb(110, 207, 207)"
-          firstColor="135, 206, 235"
-          secondColor="93, 217, 193"
-          thirdColor="74, 144, 164"
-          fourthColor="255, 133, 51"
-          fifthColor="180, 220, 255"
-          pointerColor="93, 217, 193"
-          size="120%"
-          blendingValue="normal"
-          interactive={false}
-          containerClassName="opacity-80"
-        />
+/* ─── Scroll reveal wrapper ─── */
+function Reveal({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
-        {/* Floating elements - smooth parallax */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Soft glowing orbs */}
-          <div className="absolute w-64 h-64 rounded-full bg-white/30 blur-3xl top-[10%] left-[5%]" style={{ transform: `translate(${smoothMouse.x * -20}px, ${smoothMouse.y * -20}px)` }} />
-          <div className="absolute w-80 h-80 rounded-full bg-[#FF8533]/20 blur-3xl top-[50%] right-[5%]" style={{ transform: `translate(${smoothMouse.x * -15}px, ${smoothMouse.y * -15}px)` }} />
-          <div className="absolute w-48 h-48 rounded-full bg-[#5DD9C1]/25 blur-3xl top-[30%] left-[50%]" style={{ transform: `translate(${smoothMouse.x * -25}px, ${smoothMouse.y * -25}px)` }} />
+/* ─── Icons ─── */
+function XIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
 
-          {/* Snowflakes - scattered across hero */}
-          <Snowflake style={{ top: '8%', left: '12%' }} size={4} parallaxMultiplier={-45} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '15%', left: '25%' }} size={6} parallaxMultiplier={-35} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '22%', right: '18%' }} size={5} parallaxMultiplier={-40} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '12%', right: '30%' }} size={4} parallaxMultiplier={-50} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '30%', left: '8%' }} size={7} parallaxMultiplier={-30} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '35%', right: '12%' }} size={5} parallaxMultiplier={-42} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '45%', left: '20%' }} size={4} parallaxMultiplier={-38} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '50%', right: '25%' }} size={6} parallaxMultiplier={-33} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '18%', left: '55%' }} size={5} parallaxMultiplier={-48} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '40%', left: '65%' }} size={4} parallaxMultiplier={-36} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '28%', right: '40%' }} size={6} parallaxMultiplier={-44} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '55%', left: '35%' }} size={5} parallaxMultiplier={-32} smoothMouse={smoothMouse} />
+function LinkedInIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+    </svg>
+  );
+}
 
-          {/* Pixel squares - gentle movement */}
-          <div className="absolute w-6 h-6 bg-white/50 top-[15%] left-[15%] shadow-lg shadow-white/20" style={{ transform: `translate(${smoothMouse.x * -30}px, ${smoothMouse.y * -30}px)` }} />
-          <div className="absolute w-8 h-8 bg-white/40 top-[25%] right-[20%] shadow-lg shadow-white/15" style={{ transform: `translate(${smoothMouse.x * -35}px, ${smoothMouse.y * -35}px)` }} />
-          <div className="absolute w-5 h-5 bg-[#FF8533]/50 top-[35%] left-[30%] shadow-lg shadow-orange-400/20" style={{ transform: `translate(${smoothMouse.x * -40}px, ${smoothMouse.y * -40}px)` }} />
-          <div className="absolute w-10 h-10 bg-white/35 top-[20%] right-[35%] shadow-lg shadow-white/15" style={{ transform: `translate(${smoothMouse.x * -25}px, ${smoothMouse.y * -25}px)` }} />
-          <div className="absolute w-4 h-4 bg-[#5DD9C1]/60 top-[45%] left-[8%] shadow-lg shadow-teal-400/25" style={{ transform: `translate(${smoothMouse.x * -45}px, ${smoothMouse.y * -45}px)` }} />
-          <div className="absolute w-7 h-7 bg-white/45 top-[10%] left-[45%] shadow-lg shadow-white/20" style={{ transform: `translate(${smoothMouse.x * -30}px, ${smoothMouse.y * -30}px)` }} />
-          <div className="absolute w-5 h-5 bg-[#FF8533]/40 top-[40%] right-[15%] shadow-lg shadow-orange-400/15" style={{ transform: `translate(${smoothMouse.x * -35}px, ${smoothMouse.y * -35}px)` }} />
-          <div className="absolute w-6 h-6 bg-white/50 top-[55%] right-[40%] shadow-lg shadow-white/20" style={{ transform: `translate(${smoothMouse.x * -28}px, ${smoothMouse.y * -28}px)` }} />
+function EmailIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="w-5 h-5"
+    >
+      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </svg>
+  );
+}
 
-          {/* Ice crystals */}
-          <IceCrystal className="w-8 h-12 top-[20%] left-[5%]" parallaxMultiplier={-25} smoothMouse={smoothMouse} opacity={0.25} />
-          <IceCrystal className="w-6 h-10 top-[35%] right-[8%]" parallaxMultiplier={-30} smoothMouse={smoothMouse} opacity={0.2} />
-          <IceCrystal className="w-10 h-14 top-[50%] left-[92%]" parallaxMultiplier={-22} smoothMouse={smoothMouse} opacity={0.3} />
-        </div>
+function ArrowDown() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      className="w-6 h-6"
+    >
+      <path d="M12 5v14M19 12l-7 7-7-7" />
+    </svg>
+  );
+}
 
-        {/* Detailed Pixel Mountains - 3 layers */}
-        <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
-          {/* Layer 3 - Furthest back, dark blue-gray */}
-          <svg viewBox="0 0 1440 320" className="absolute bottom-0 w-full" style={{ transform: `translateY(${smoothMouse.y * 8}px)` }} preserveAspectRatio="none">
-            <polygon fill="#3D6B7D" fillOpacity="0.5" points="0,320 0,200 50,180 100,195 150,160 200,175 250,140 300,155 350,120 400,140 450,100 500,120 550,85 600,105 650,70 700,90 750,60 800,80 850,50 900,70 950,45 1000,65 1050,40 1100,60 1150,35 1200,55 1250,30 1300,50 1350,40 1400,60 1440,45 1440,320" />
-          </svg>
+/* ─── Shared styles ─── */
+const headingFont = {
+  fontFamily: "'Space Grotesk', system-ui, sans-serif",
+};
 
-          {/* Layer 2 - Middle, medium blue with snow caps */}
-          <svg viewBox="0 0 1440 260" className="absolute bottom-0 w-full" style={{ transform: `translateY(${smoothMouse.y * 5}px)` }} preserveAspectRatio="none">
-            <polygon fill="#4A90A4" fillOpacity="0.7" points="0,260 0,180 80,160 120,175 180,140 220,155 280,120 320,135 380,100 420,120 480,85 520,105 580,70 620,90 680,60 720,80 780,50 820,70 880,45 920,65 980,40 1020,60 1080,35 1120,55 1180,30 1220,50 1280,40 1320,60 1380,45 1440,65 1440,260" />
-            {/* Snow caps - more visible */}
-            <polygon fill="#FFFFFF" fillOpacity="0.9" points="280,120 300,125 320,135 300,128" />
-            <polygon fill="#FFFFFF" fillOpacity="0.9" points="480,85 500,90 520,105 500,95" />
-            <polygon fill="#FFFFFF" fillOpacity="0.9" points="680,60 700,65 720,80 700,70" />
-            <polygon fill="#FFFFFF" fillOpacity="0.9" points="880,45 900,50 920,65 900,55" />
-            <polygon fill="#FFFFFF" fillOpacity="0.9" points="1080,35 1100,40 1120,55 1100,45" />
-          </svg>
+/* ─── Data ─── */
+const roles = [
+  "Build Communities",
+  "Drive Growth",
+  "Scale Ecosystems",
+  "Leverage AI",
+];
 
-          {/* Layer 1 - Front, white/light ice with detail */}
-          <svg viewBox="0 0 1440 200" className="absolute bottom-0 w-full" style={{ transform: `translateY(${smoothMouse.y * 2}px)` }} preserveAspectRatio="none">
-            <polygon fill="#FFFFFF" fillOpacity="0.95" points="0,200 0,160 100,140 140,155 200,120 240,135 300,105 340,120 400,90 440,110 500,80 540,100 600,75 640,95 700,65 740,85 800,60 840,80 900,55 940,75 1000,50 1040,70 1100,48 1140,68 1200,45 1240,65 1300,55 1340,75 1400,60 1440,80 1440,200" />
-            {/* Ice details */}
-            <polygon fill="#E8F4F8" fillOpacity="0.6" points="200,120 220,125 240,135 220,128" />
-            <polygon fill="#E8F4F8" fillOpacity="0.6" points="500,80 520,85 540,100 520,90" />
-            <polygon fill="#E8F4F8" fillOpacity="0.6" points="800,60 820,65 840,80 820,70" />
-          </svg>
-        </div>
+const stats = [
+  { value: 7, suffix: "+", label: "Years Experience" },
+  { value: 100, suffix: "K+", label: "Community Built" },
+  { value: 2.5, suffix: "M", prefix: "$", label: "Raised", decimals: 1 },
+  { value: 3, suffix: "", label: "Languages" },
+];
 
-        {/* Hero Content */}
-        <div className="container mx-auto px-6 py-32 md:py-40 relative z-10 text-center">
-          <div className="mb-12 md:mb-16 flex justify-center" style={{ transform: `translate(${smoothMouse.x * 8}px, ${smoothMouse.y * 8}px)` }}>
-            <div className="w-72 h-72 md:w-96 md:h-96 lg:w-[400px] lg:h-[400px] border-4 border-black rounded-2xl overflow-hidden animate-breathing relative shadow-2xl shadow-black/30">
-              <Image src="/hero-penguin.png" alt="Krypto Pengus Hero" fill className="object-cover" priority />
-            </div>
-          </div>
+const experiences = [
+  {
+    company: "Sui Foundation",
+    role: "Ambassador",
+    period: "2024 \u2014 Present",
+    highlight: "1,000+ event attendees",
+    brief:
+      "Regional expansion strategy for Sui Network ecosystem in Portugal",
+    tags: ["Web3", "Community", "Events", "Partnerships"],
+  },
+  {
+    company: "Interest Labs",
+    role: "Marketing Manager",
+    period: "2021 \u2014 Present",
+    highlight: "100K+ community members",
+    brief: "End-to-end marketing and ecosystem growth for Web3 protocols",
+    tags: ["Growth", "Go-to-Market", "DeFi", "Content"],
+  },
+  {
+    company: "DeepSquare",
+    role: "Community Lead",
+    period: "2020 \u2014 2021",
+    highlight: "$2.5M fundraise",
+    brief: "Built decentralized cloud computing community from scratch",
+    tags: ["Community", "Content", "Crisis Comms"],
+  },
+  {
+    company: "Tourvest Group",
+    role: "Marketing Executive",
+    period: "2019 \u2014 2020",
+    highlight: "3 brands managed",
+    brief:
+      "Integrated marketing campaigns across travel brands in Namibia",
+    tags: ["Digital", "SEO", "Email", "Branding"],
+  },
+];
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold mb-8 uppercase tracking-tight text-black drop-shadow-lg">
-            KRYPTO<br className="md:hidden" /> PENGUS
-          </h1>
+const expertise = [
+  {
+    title: "Community Building",
+    description:
+      "Discord, Telegram, X \u2014 from 0 to 100K+ with genuine engagement",
+  },
+  {
+    title: "Web3 & Blockchain",
+    description:
+      "DeFi protocols, NFT ecosystems, Sui Network, ecosystem growth",
+  },
+  {
+    title: "Growth Marketing",
+    description:
+      "Multi-channel strategy, paid & organic, measurable ROI",
+  },
+  {
+    title: "AI & Automation",
+    description:
+      "Vibecoding, AI-powered workflows \u2014 a one-person marketing department",
+  },
+  {
+    title: "Business Development",
+    description:
+      "Strategic partnerships, university & tech hub collaborations",
+  },
+  {
+    title: "Content Strategy",
+    description:
+      "Technical narratives, educational content, social media planning",
+  },
+];
 
-          <p className="text-xl md:text-2xl mb-16 text-black/90 tracking-wide max-w-3xl mx-auto" style={{ letterSpacing: '0.1em' }}>
-            Never Give Up.
-          </p>
+/* ─── Animation variants ─── */
+const stagger = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.15 },
+  },
+};
 
-          <div className="flex justify-center mb-20">
-            <a href="#mint" className="btn-primary text-lg px-16 min-w-[280px] shadow-xl shadow-orange-500/30 hover:shadow-orange-500/50 transition-shadow">
-              MINT NOW
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+    },
+  },
+};
+
+/* ─────────────────────────────────────────
+   Page
+   ───────────────────────────────────────── */
+export default function Home() {
+  const [mounted, setMounted] = useState(false);
+  const [mouse, setMouse] = useState({ x: 0.5, y: 0.5 });
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+
+  useEffect(() => {
+    setMounted(true);
+    const handler = (e: MouseEvent) => {
+      setMouse({
+        x: e.clientX / window.innerWidth,
+        y: e.clientY / window.innerHeight,
+      });
+    };
+    window.addEventListener("mousemove", handler);
+    return () => window.removeEventListener("mousemove", handler);
+  }, []);
+
+  if (!mounted) return null;
+
+  return (
+    <main className="relative bg-[#0a0a0a] min-h-screen">
+      {/* ── Nav ── */}
+      <motion.nav
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.4, duration: 0.6 }}
+        className="fixed top-0 left-0 right-0 z-50 px-4 py-4 md:px-8"
+      >
+        <div className="max-w-5xl mx-auto flex items-center justify-between backdrop-blur-md bg-white/[0.03] border border-white/[0.06] rounded-full px-5 py-2.5">
+          <span
+            className="text-sm font-bold tracking-widest text-white/70"
+            style={headingFont}
+          >
+            MV
+          </span>
+          <div className="hidden md:flex items-center gap-6 text-sm text-white/40">
+            <a
+              href="#experience"
+              className="hover:text-white/80 transition-colors duration-300"
+              style={headingFont}
+            >
+              Experience
+            </a>
+            <a
+              href="#expertise"
+              className="hover:text-white/80 transition-colors duration-300"
+              style={headingFont}
+            >
+              Skills
+            </a>
+            <a
+              href="#contact"
+              className="hover:text-white/80 transition-colors duration-300"
+              style={headingFont}
+            >
+              Contact
             </a>
           </div>
-
-          <div className="flex flex-wrap justify-center gap-4 md:gap-8 text-sm md:text-base opacity-70 text-black">
-            <span>3,333 unique penguins</span>
-            <span className="hidden md:inline">•</span>
-            <span>Sui Network</span>
-            <span className="hidden md:inline">•</span>
-            <span>Walrus Storage</span>
+          <div className="flex items-center gap-3">
+            <a
+              href="https://x.com/satoshimedici"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/40 hover:text-[#5DD9C1] transition-colors duration-300"
+              aria-label="X (Twitter)"
+            >
+              <XIcon />
+            </a>
+            <a
+              href="https://linkedin.com/in/mario-vasconcelos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/40 hover:text-[#5DD9C1] transition-colors duration-300"
+              aria-label="LinkedIn"
+            >
+              <LinkedInIcon />
+            </a>
+            <a
+              href="mailto:super.mario.jorge@icloud.com"
+              className="text-white/40 hover:text-[#5DD9C1] transition-colors duration-300"
+              aria-label="Email"
+            >
+              <EmailIcon />
+            </a>
           </div>
         </div>
-      </section>
+      </motion.nav>
 
-      {/* ═══════════════════════════════════════════════════════════════
-          STORY SECTION - The Penguin Village
-          Background continues seamlessly from hero (#6ECFCF → #5DD9C1)
-          ═══════════════════════════════════════════════════════════════ */}
-      <section id="story" className="relative py-20 md:py-40 overflow-hidden bg-gradient-to-b from-[#6ECFCF] via-[#5DD9C1] to-[#6ECFCF]">
-        {/* Parallax glowing orbs */}
-        <div className="absolute w-96 h-96 rounded-full bg-white/25 blur-3xl top-[10%] left-[5%]" style={{ transform: `translate(${smoothMouse.x * -18}px, ${smoothMouse.y * -18}px)` }} />
-        <div className="absolute w-80 h-80 rounded-full bg-[#FF8533]/15 blur-3xl top-[60%] right-[10%]" style={{ transform: `translate(${smoothMouse.x * -22}px, ${smoothMouse.y * -22}px)` }} />
-        <div className="absolute w-64 h-64 rounded-full bg-[#87CEEB]/20 blur-3xl top-[40%] left-[40%]" style={{ transform: `translate(${smoothMouse.x * -15}px, ${smoothMouse.y * -15}px)` }} />
-
-        {/* Snowflakes throughout section */}
-        <div className="absolute inset-0 pointer-events-none">
-          <Snowflake style={{ top: '5%', left: '15%' }} size={5} parallaxMultiplier={-42} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '12%', right: '20%' }} size={6} parallaxMultiplier={-38} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '20%', left: '40%' }} size={4} parallaxMultiplier={-45} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '25%', right: '35%' }} size={5} parallaxMultiplier={-35} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '35%', left: '8%' }} size={6} parallaxMultiplier={-40} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '40%', right: '10%' }} size={4} parallaxMultiplier={-48} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '50%', left: '25%' }} size={5} parallaxMultiplier={-36} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '55%', right: '28%' }} size={6} parallaxMultiplier={-42} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '65%', left: '50%' }} size={4} parallaxMultiplier={-38} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '70%', right: '15%' }} size={5} parallaxMultiplier={-44} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '75%', left: '12%' }} size={6} parallaxMultiplier={-32} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '80%', right: '45%' }} size={4} parallaxMultiplier={-46} smoothMouse={smoothMouse} />
-        </div>
-
-        {/* LORE: Penguin Village - Positioned in middle area to avoid overlap */}
-        <div className="absolute inset-0 pointer-events-none">
-          {/* Igloos positioned in mid-section */}
-          <svg className="absolute top-[15%] left-[3%] w-36 h-24 opacity-35" viewBox="0 0 100 60" style={{ transform: `translate(${smoothMouse.x * -12}px, ${smoothMouse.y * -8}px)` }}>
-            <ellipse cx="50" cy="48" rx="48" ry="22" fill="#4A90A4"/>
-            <ellipse cx="50" cy="45" rx="42" ry="18" fill="#5DD9C1"/>
-            <rect x="38" y="32" width="24" height="28" rx="12" fill="#3D6B7D"/>
-            <rect x="42" y="36" width="16" height="24" rx="8" fill="#2C5F75"/>
-          </svg>
-          <svg className="absolute top-[25%] right-[5%] w-40 h-28 opacity-40" viewBox="0 0 100 60" style={{ transform: `translate(${smoothMouse.x * -10}px, ${smoothMouse.y * -6}px)` }}>
-            <ellipse cx="50" cy="48" rx="48" ry="22" fill="#4A90A4"/>
-            <ellipse cx="50" cy="45" rx="42" ry="18" fill="#5DD9C1"/>
-            <rect x="38" y="32" width="24" height="28" rx="12" fill="#3D6B7D"/>
-            <rect x="42" y="36" width="16" height="24" rx="8" fill="#2C5F75"/>
-          </svg>
-          <svg className="absolute top-[60%] left-[8%] w-32 h-22 opacity-30" viewBox="0 0 100 60" style={{ transform: `translate(${smoothMouse.x * -15}px, ${smoothMouse.y * -10}px)` }}>
-            <ellipse cx="50" cy="48" rx="48" ry="22" fill="#4A90A4"/>
-            <rect x="38" y="32" width="24" height="28" rx="12" fill="#3D6B7D"/>
-          </svg>
-
-          {/* Penguin colony silhouettes - spread throughout */}
-          <div className="absolute top-[35%] left-[20%] flex gap-2 opacity-30" style={{ transform: `translate(${smoothMouse.x * -20}px, ${smoothMouse.y * -10}px)` }}>
-            {[6, 8, 7, 9, 6, 8, 7].map((h, i) => (
-              <div key={i} className="bg-[#1A3A4A] rounded-t-full" style={{ width: `${h}px`, height: `${h * 1.5}px` }} />
-            ))}
-          </div>
-          <div className="absolute top-[50%] right-[25%] flex gap-1.5 opacity-25" style={{ transform: `translate(${smoothMouse.x * -25}px, ${smoothMouse.y * -15}px)` }}>
-            {[5, 6, 5, 7, 6].map((h, i) => (
-              <div key={i} className="bg-[#1A3A4A] rounded-t-full" style={{ width: `${h}px`, height: `${h * 1.5}px` }} />
-            ))}
-          </div>
-
-          {/* Ice crystals spread throughout */}
-          <IceCrystal className="w-8 h-14 top-[10%] right-[30%]" parallaxMultiplier={-28} smoothMouse={smoothMouse} opacity={0.25} />
-          <IceCrystal className="w-10 h-16 top-[45%] left-[85%]" parallaxMultiplier={-22} smoothMouse={smoothMouse} opacity={0.3} />
-          <IceCrystal className="w-6 h-10 top-[70%] right-[8%]" parallaxMultiplier={-32} smoothMouse={smoothMouse} opacity={0.2} />
-          <IceCrystal className="w-8 h-12 top-[30%] left-[60%]" parallaxMultiplier={-26} smoothMouse={smoothMouse} opacity={0.25} />
-        </div>
-
-        {/* Floating pixel squares with parallax */}
-        <div className="absolute w-5 h-5 bg-white/50 top-[15%] left-[10%]" style={{ transform: `translate(${smoothMouse.x * -35}px, ${smoothMouse.y * -35}px)` }} />
-        <div className="absolute w-6 h-6 bg-[#FF8533]/40 top-[55%] right-[12%]" style={{ transform: `translate(${smoothMouse.x * -28}px, ${smoothMouse.y * -28}px)` }} />
-        <div className="absolute w-4 h-4 bg-white/45 top-[40%] right-[5%]" style={{ transform: `translate(${smoothMouse.x * -40}px, ${smoothMouse.y * -40}px)` }} />
-        <div className="absolute w-7 h-7 bg-[#87CEEB]/50 top-[25%] left-[85%]" style={{ transform: `translate(${smoothMouse.x * -32}px, ${smoothMouse.y * -32}px)` }} />
-
-        <div className="container mx-auto px-6 max-w-4xl text-center relative z-10">
-          <h2 className="text-4xl md:text-6xl font-bold mb-16 md:mb-20 text-[#2C5F75] fade-in drop-shadow-lg">THE MARCH</h2>
-
-          <div className="space-y-8 text-xl md:text-2xl text-[#1A3A4A] max-w-2xl mx-auto fade-in text-justify">
-            <p>In the frozen wilderness, one penguin stands alone. Not because it is lost. Not because it is weak. But because it chose the braver path.</p>
-            <p>While others huddle together for warmth, it steps forward, guided by instinct, toward the mountain that pierces the ice-grey sky. Each footprint in the snow is a decision. Each breath, a test of resolve.</p>
-            <p>No two are the same. But all begin with the courage to move forward.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          COLLECTION SECTION - Zoom Parallax Gallery
-          ═══════════════════════════════════════════════════════════════ */}
-      <section id="collection" className="relative bg-gradient-to-b from-[#6ECFCF] via-[#5DD9C1] to-[#6ECFCF]">
-        {/* Gallery Header */}
-        <div className="text-center py-12 relative z-10">
-          <h2 className="text-4xl md:text-6xl font-bold text-[#2C5F75] drop-shadow-lg fade-in">THE COLLECTION</h2>
-          <p className="text-lg md:text-xl text-[#3D6B7D] mt-4 fade-in">3,333 unique pixel penguins</p>
-        </div>
-
-        {/* Zoom Parallax Gallery */}
-        <ZoomParallax
-          images={[
-            { src: '/nft-5.jpg', alt: 'Krypto Pengus NFT #5' },
-            { src: '/nft-2.jpg', alt: 'Krypto Pengus NFT #2' },
-            { src: '/nft-8.jpg', alt: 'Krypto Pengus NFT #8' },
-            { src: '/nft-1.jpg', alt: 'Krypto Pengus NFT #1' },
-            { src: '/nft-10.jpg', alt: 'Krypto Pengus NFT #10' },
-            { src: '/nft-3.jpg', alt: 'Krypto Pengus NFT #3' },
-            { src: '/nft-7.jpg', alt: 'Krypto Pengus NFT #7' },
-          ]}
-        />
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          MINT SECTION - Digital Transformation Portal
-          ═══════════════════════════════════════════════════════════════ */}
-      <section id="mint" className="relative py-16 md:py-24 overflow-hidden bg-gradient-to-b from-[#6ECFCF] via-[#7EC8E3] to-[#87CEEB]">
-        {/* Aurora Background Effect */}
-        <BackgroundGradientAnimation
-          gradientBackgroundStart="rgb(110, 207, 207)"
-          gradientBackgroundEnd="rgb(135, 206, 235)"
-          firstColor="126, 200, 227"
-          secondColor="93, 217, 193"
-          thirdColor="74, 144, 164"
-          fourthColor="255, 133, 51"
-          fifthColor="180, 220, 255"
-          pointerColor="126, 200, 227"
-          size="100%"
-          blendingValue="normal"
-          interactive={false}
-          containerClassName="opacity-50"
-        />
-
-        {/* Central portal glow with parallax */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#5DD9C1]/25 rounded-full blur-3xl pointer-events-none animate-pulse-slow" style={{ transform: `translate(calc(-50% + ${smoothMouse.x * 10}px), calc(-50% + ${smoothMouse.y * 10}px))` }} />
-
-        {/* Parallax orbs */}
-        <div className="absolute w-80 h-80 rounded-full bg-white/30 blur-3xl top-[10%] left-[5%]" style={{ transform: `translate(${smoothMouse.x * -18}px, ${smoothMouse.y * -18}px)` }} />
-        <div className="absolute w-72 h-72 rounded-full bg-[#FF8533]/15 blur-3xl top-[60%] right-[8%]" style={{ transform: `translate(${smoothMouse.x * -22}px, ${smoothMouse.y * -22}px)` }} />
-
-        {/* Snowflakes throughout section */}
-        <div className="absolute inset-0 pointer-events-none">
-          <Snowflake style={{ top: '5%', left: '20%' }} size={5} parallaxMultiplier={-38} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '12%', right: '25%' }} size={6} parallaxMultiplier={-42} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '18%', left: '50%' }} size={4} parallaxMultiplier={-46} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '28%', right: '40%' }} size={5} parallaxMultiplier={-36} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '35%', left: '12%' }} size={6} parallaxMultiplier={-40} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '42%', right: '15%' }} size={4} parallaxMultiplier={-44} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '55%', left: '28%' }} size={5} parallaxMultiplier={-38} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '62%', right: '32%' }} size={6} parallaxMultiplier={-42} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '70%', left: '60%' }} size={4} parallaxMultiplier={-36} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '78%', right: '20%' }} size={5} parallaxMultiplier={-40} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '85%', left: '18%' }} size={6} parallaxMultiplier={-44} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '92%', right: '48%' }} size={4} parallaxMultiplier={-38} smoothMouse={smoothMouse} />
-        </div>
-
-        {/* Ice crystals on edges */}
-        <div className="absolute inset-0 pointer-events-none">
-          <IceCrystal className="w-8 h-14 top-[15%] left-[3%]" parallaxMultiplier={-24} smoothMouse={smoothMouse} opacity={0.22} />
-          <IceCrystal className="w-10 h-16 top-[40%] right-[4%]" parallaxMultiplier={-20} smoothMouse={smoothMouse} opacity={0.25} />
-          <IceCrystal className="w-6 h-12 top-[65%] left-[92%]" parallaxMultiplier={-28} smoothMouse={smoothMouse} opacity={0.2} />
-          <IceCrystal className="w-8 h-14 top-[80%] left-[5%]" parallaxMultiplier={-22} smoothMouse={smoothMouse} opacity={0.24} />
-        </div>
-
-        {/* Digital particles flowing */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute w-3 h-3 bg-[#5DD9C1]/60 top-[15%] left-[15%]" style={{ transform: `translate(${smoothMouse.x * -45}px, ${smoothMouse.y * -45}px)` }} />
-          <div className="absolute w-4 h-4 bg-white/50 top-[25%] right-[20%]" style={{ transform: `translate(${smoothMouse.x * -35}px, ${smoothMouse.y * -35}px)` }} />
-          <div className="absolute w-3 h-3 bg-[#FF8533]/50 top-[70%] left-[25%]" style={{ transform: `translate(${smoothMouse.x * -40}px, ${smoothMouse.y * -40}px)` }} />
-          <div className="absolute w-5 h-5 bg-[#5DD9C1]/45 top-[45%] right-[10%]" style={{ transform: `translate(${smoothMouse.x * -30}px, ${smoothMouse.y * -30}px)` }} />
-          <div className="absolute w-4 h-4 bg-white/55 top-[80%] right-[30%]" style={{ transform: `translate(${smoothMouse.x * -38}px, ${smoothMouse.y * -38}px)` }} />
-          <div className="absolute w-3 h-3 bg-[#87CEEB]/60 top-[60%] left-[8%]" style={{ transform: `translate(${smoothMouse.x * -42}px, ${smoothMouse.y * -42}px)` }} />
-        </div>
-
-        <div className="container mx-auto px-6 relative z-10">
-          <h2 className="text-center text-4xl md:text-6xl font-bold mb-16 md:mb-20 text-[#2C5F75] fade-in drop-shadow-lg">MINT YOUR PENGUIN</h2>
-
-          <div className="max-w-2xl mx-auto">
-            <div className="p-10 md:p-16 space-y-10 fade-in bg-white/70 backdrop-blur-md rounded-2xl border-4 border-[#5DD9C1]/50 shadow-2xl hover:shadow-[#5DD9C1]/30 transition-shadow duration-500">
-              <div className="text-center space-y-4">
-                <div className="text-2xl md:text-3xl font-bold text-[#2C5F75]">WHITELIST MINT LIVE</div>
-                <div className="text-4xl md:text-5xl font-bold text-[#5DD9C1] drop-shadow-lg">10 SUI</div>
-                <div className="text-base text-[#3D6B7D]">per NFT</div>
-                <div className="text-sm text-[#4A90A4]">847 / 1,000 Remaining</div>
-              </div>
-
-              <div className="border-t border-[#5DD9C1]/30"></div>
-
-              <div>
-                <div className="flex items-center justify-center gap-6 mb-4">
-                  <button className="w-16 h-16 border-3 border-[#5DD9C1] rounded-xl bg-white hover:bg-[#5DD9C1] hover:text-white text-[#2C5F75] transition-all duration-300 text-2xl font-bold shadow-lg">-</button>
-                  <div className="text-4xl font-bold w-20 text-center text-[#2C5F75]">1</div>
-                  <button className="w-16 h-16 border-3 border-[#5DD9C1] rounded-xl bg-white hover:bg-[#5DD9C1] hover:text-white text-[#2C5F75] transition-all duration-300 text-2xl font-bold shadow-lg">+</button>
-                </div>
-                <div className="text-center text-sm text-[#4A90A4]">(Max: 3 per wallet)</div>
-              </div>
-
-              <div className="text-center py-6">
-                <div className="text-base text-[#3D6B7D] mb-2">Total:</div>
-                <div className="text-3xl md:text-4xl font-bold text-[#5DD9C1]">10 SUI</div>
-              </div>
-
-              <button className="w-full py-6 text-xl font-bold bg-[#FF8533] text-white rounded-xl hover:bg-[#E5722E] transition-all duration-300 shadow-xl shadow-orange-500/30 hover:shadow-orange-500/50">MINT NOW</button>
-
-              <div className="text-center text-sm text-[#4A90A4] pt-6 border-t border-[#5DD9C1]/30">
-                <div>✓ Instant reveal  •  Sui Network  •  Walrus Storage</div>
-              </div>
-            </div>
-
-            <div className="mt-12 fade-in">
-              <div className="flex justify-between text-base mb-3 text-[#2C5F75]">
-                <span>MINTED: 2,153 / 3,333</span>
-                <span>64.7%</span>
-              </div>
-              <div className="h-8 bg-white/50 rounded-full overflow-hidden border-2 border-[#5DD9C1]/30">
-                <div className="h-full bg-gradient-to-r from-[#5DD9C1] to-[#4A90A4] rounded-full transition-all duration-1000 shadow-lg" style={{ width: '64.7%' }}></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          FOOTER
-          ═══════════════════════════════════════════════════════════════ */}
-      <footer className="relative py-16 overflow-hidden bg-gradient-to-b from-[#87CEEB] to-[#A8E0F0]">
-        <div className="absolute w-96 h-32 rounded-full bg-[#5DD9C1]/10 blur-3xl bottom-0 left-1/2 -translate-x-1/2" />
-
-        {/* Snowflakes in footer */}
-        <div className="absolute inset-0 pointer-events-none">
-          <Snowflake style={{ top: '15%', left: '10%' }} size={4} parallaxMultiplier={-30} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '25%', right: '15%' }} size={5} parallaxMultiplier={-35} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '40%', left: '30%' }} size={4} parallaxMultiplier={-32} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '50%', right: '35%' }} size={5} parallaxMultiplier={-38} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '65%', left: '55%' }} size={4} parallaxMultiplier={-28} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '75%', right: '50%' }} size={5} parallaxMultiplier={-34} smoothMouse={smoothMouse} />
-        </div>
-
-        <div className="container mx-auto px-6 text-center relative z-10">
-          <SocialLinks
-            socials={[
-              {
-                name: "X",
-                image: "/social/x-icon.svg",
-                href: "https://x.com/KryptoPengus",
-              },
-              {
-                name: "Discord",
-                image: "/social/discord-icon.svg",
-                href: "https://discord.gg/kryptopengus",
-              },
-              {
-                name: "Instagram",
-                image: "/social/instagram-icon.svg",
-                href: "https://instagram.com/kryptopengus",
-              },
-            ]}
-            className="mb-8 text-[#4A90A4]"
+      {/* ── Hero ── */}
+      <motion.section
+        ref={heroRef}
+        style={{ opacity: heroOpacity, padding: 0 }}
+        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      >
+        {/* Animated gradient blobs */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] rounded-full bg-[#5DD9C1]/[0.07] blur-[120px] animate-first" />
+          <div className="absolute bottom-1/4 -right-1/4 w-[400px] h-[400px] rounded-full bg-[#FF8533]/[0.05] blur-[100px] animate-second" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#3B82F6]/[0.04] blur-[140px] animate-third" />
+          {/* Mouse-following glow */}
+          <div
+            className="absolute w-[400px] h-[400px] rounded-full bg-[#5DD9C1]/[0.06] blur-[100px] pointer-events-none"
+            style={{
+              left: `${mouse.x * 100}%`,
+              top: `${mouse.y * 100}%`,
+              transform: "translate(-50%, -50%)",
+              transition: "left 2s ease-out, top 2s ease-out",
+            }}
           />
-          <p className="text-sm text-[#87CEEB]">© 2026 Krypto Pengus.</p>
+        </div>
+
+        {/* Dot grid */}
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.07) 1px, transparent 0)",
+            backgroundSize: "32px 32px",
+          }}
+        />
+
+        <motion.div
+          style={{ y: heroY }}
+          className="relative z-10 text-center px-6 max-w-4xl mx-auto"
+        >
+          {/* Available badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#5DD9C1]/20 bg-[#5DD9C1]/[0.04] mb-8"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#5DD9C1] opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#5DD9C1]" />
+            </span>
+            <span className="text-xs font-medium tracking-widest text-[#5DD9C1]/80 uppercase">
+              Open to opportunities
+            </span>
+          </motion.div>
+
+          {/* Name */}
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: 0.5,
+              duration: 0.8,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="text-5xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tight mb-4 leading-[1.05]"
+            style={{ ...headingFont, textTransform: "none" }}
+          >
+            <span className="bg-gradient-to-r from-white via-white to-white/50 bg-clip-text text-transparent">
+              Mario
+            </span>
+            <br />
+            <span className="bg-gradient-to-r from-[#5DD9C1] via-[#4AACDB] to-[#3B82F6] bg-clip-text text-transparent">
+              Vasconcelos
+            </span>
+          </motion.h1>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            className="text-base md:text-lg text-white/40 font-medium tracking-wide mb-8"
+            style={headingFont}
+          >
+            Digital Strategist & Business Developer
+          </motion.p>
+
+          {/* Flip words */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 0.6 }}
+            className="text-lg md:text-2xl text-white/80 h-12 flex items-center justify-center relative"
+          >
+            <span className="text-white/30 mr-1">I</span>
+            <FlipWords
+              words={roles}
+              duration={2500}
+              className="text-[#FF8533] font-semibold"
+            />
+          </motion.div>
+
+          {/* Scroll indicator */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5, duration: 0.6 }}
+            className="absolute -bottom-24 left-1/2 -translate-x-1/2"
+          >
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{
+                repeat: Infinity,
+                duration: 2,
+                ease: "easeInOut",
+              }}
+              className="text-white/15"
+            >
+              <ArrowDown />
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      </motion.section>
+
+      {/* ── Stats ── */}
+      <section className="relative py-16 md:py-20 border-y border-white/[0.04]">
+        <div className="max-w-5xl mx-auto px-6">
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12"
+          >
+            {stats.map((s, i) => (
+              <motion.div key={i} variants={fadeUp} className="text-center">
+                <div
+                  className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-[#5DD9C1] to-[#3B82F6] bg-clip-text text-transparent mb-2"
+                  style={headingFont}
+                >
+                  <Counter
+                    value={s.value}
+                    suffix={s.suffix}
+                    prefix={s.prefix || ""}
+                    decimals={s.decimals || 0}
+                  />
+                </div>
+                <div className="text-xs md:text-sm text-white/30 tracking-wider uppercase">
+                  {s.label}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── Experience ── */}
+      <section id="experience" className="py-20 md:py-32 px-6">
+        <div className="max-w-5xl mx-auto">
+          <Reveal>
+            <p
+              className="text-sm text-[#5DD9C1]/60 tracking-widest uppercase mb-3"
+              style={headingFont}
+            >
+              Track Record
+            </p>
+            <h2
+              className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 tracking-tight"
+              style={{ ...headingFont, textTransform: "none" }}
+            >
+              Experience
+            </h2>
+            <div className="w-16 h-1 bg-gradient-to-r from-[#5DD9C1] to-[#3B82F6] rounded-full mb-14" />
+          </Reveal>
+
+          <div className="space-y-4">
+            {experiences.map((exp, i) => (
+              <Reveal key={i} delay={i * 0.08}>
+                <motion.div
+                  whileHover={{ x: 4 }}
+                  transition={{ duration: 0.2 }}
+                  className="group relative p-6 md:p-8 rounded-2xl border border-white/[0.04] bg-white/[0.015] hover:bg-white/[0.03] hover:border-white/[0.08] transition-all duration-500 overflow-hidden"
+                >
+                  {/* Left accent line */}
+                  <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-[#5DD9C1] to-[#3B82F6] opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full" />
+
+                  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
+                        <h3
+                          className="text-lg md:text-xl font-bold text-white"
+                          style={{
+                            ...headingFont,
+                            textTransform: "none",
+                          }}
+                        >
+                          {exp.company}
+                        </h3>
+                        <span
+                          className="text-[#5DD9C1]/80 font-medium text-sm"
+                          style={headingFont}
+                        >
+                          {exp.role}
+                        </span>
+                      </div>
+                      <p className="text-white/35 text-sm mb-3">
+                        {exp.brief}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {exp.tags.map((tag, j) => (
+                          <span
+                            key={j}
+                            className="text-[11px] px-2.5 py-1 rounded-full border border-white/[0.06] text-white/40 tracking-wide"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex flex-row md:flex-col items-start md:items-end gap-2 md:gap-1 shrink-0">
+                      <span className="text-xs text-white/25 tracking-wide">
+                        {exp.period}
+                      </span>
+                      <span className="text-sm font-semibold text-[#FF8533]">
+                        {exp.highlight}
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Expertise ── */}
+      <section id="expertise" className="py-20 md:py-32 px-6 relative">
+        {/* Background glow */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full bg-[#5DD9C1]/[0.025] blur-[160px]" />
+        </div>
+
+        <div className="max-w-5xl mx-auto relative z-10">
+          <Reveal>
+            <p
+              className="text-sm text-[#FF8533]/60 tracking-widest uppercase mb-3"
+              style={headingFont}
+            >
+              What I Bring
+            </p>
+            <h2
+              className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 tracking-tight"
+              style={{ ...headingFont, textTransform: "none" }}
+            >
+              Expertise
+            </h2>
+            <div className="w-16 h-1 bg-gradient-to-r from-[#FF8533] to-[#FF6B00] rounded-full mb-14" />
+          </Reveal>
+
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            {expertise.map((skill, i) => (
+              <motion.div
+                key={i}
+                variants={fadeUp}
+                whileHover={{
+                  y: -4,
+                  borderColor: "rgba(93,217,193,0.15)",
+                }}
+                className="group relative p-6 rounded-2xl border border-white/[0.04] bg-white/[0.015] hover:bg-white/[0.03] transition-all duration-500 overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-[#5DD9C1]/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative z-10">
+                  <h3
+                    className="text-base font-bold text-white mb-2"
+                    style={{
+                      ...headingFont,
+                      textTransform: "none",
+                    }}
+                  >
+                    {skill.title}
+                  </h3>
+                  <p className="text-sm text-white/35 leading-relaxed">
+                    {skill.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── Education & Languages ── */}
+      <section className="py-16 md:py-20 px-6 border-t border-white/[0.04]">
+        <div className="max-w-5xl mx-auto">
+          <Reveal>
+            <div className="flex flex-col md:flex-row md:items-start justify-between gap-10">
+              <div>
+                <p
+                  className="text-sm text-white/25 tracking-widest uppercase mb-3"
+                  style={headingFont}
+                >
+                  Education
+                </p>
+                <h3
+                  className="text-xl md:text-2xl font-bold text-white mb-1"
+                  style={{ ...headingFont, textTransform: "none" }}
+                >
+                  Master in Digital Marketing & E-Commerce
+                </h3>
+                <p className="text-white/35 text-sm">
+                  OBS Business School / University of Barcelona
+                </p>
+              </div>
+              <div className="shrink-0">
+                <p
+                  className="text-sm text-white/25 tracking-widest uppercase mb-3"
+                  style={headingFont}
+                >
+                  Languages
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {["English", "Portuguese", "Spanish"].map(
+                    (lang, i) => (
+                      <span
+                        key={i}
+                        className="px-4 py-2 rounded-full border border-white/[0.06] text-sm text-white/50 hover:border-[#5DD9C1]/20 hover:text-white/70 transition-all duration-300"
+                      >
+                        {lang}
+                      </span>
+                    )
+                  )}
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section
+        id="contact"
+        className="py-28 md:py-40 px-6 relative overflow-hidden"
+      >
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute bottom-0 left-1/4 w-[600px] h-[300px] rounded-full bg-[#5DD9C1]/[0.04] blur-[120px]" />
+          <div className="absolute bottom-0 right-1/4 w-[400px] h-[200px] rounded-full bg-[#FF8533]/[0.03] blur-[100px]" />
+        </div>
+
+        <div className="max-w-3xl mx-auto text-center relative z-10">
+          <Reveal>
+            <h2
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight leading-tight"
+              style={{ ...headingFont, textTransform: "none" }}
+            >
+              <span className="bg-gradient-to-r from-white to-white/50 bg-clip-text text-transparent">
+                Let&apos;s Build
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-[#5DD9C1] via-[#4AACDB] to-[#3B82F6] bg-clip-text text-transparent">
+                Together
+              </span>
+            </h2>
+          </Reveal>
+
+          <Reveal delay={0.1}>
+            <p className="text-white/30 mb-4 max-w-md mx-auto text-sm md:text-base">
+              Looking for a digital strategist who lives and breathes
+              Web3, builds communities, and ships with AI?
+            </p>
+            <div className="flex flex-wrap justify-center gap-2 mb-12">
+              {["Full-time", "Consulting", "Advisory"].map(
+                (type, i) => (
+                  <span
+                    key={i}
+                    className="text-xs px-3 py-1.5 rounded-full border border-white/[0.06] text-white/30"
+                  >
+                    {type}
+                  </span>
+                )
+              )}
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.2}>
+            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3">
+              <a
+                href="mailto:super.mario.jorge@icloud.com"
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-[#5DD9C1] to-[#3B82F6] text-[#0a0a0a] font-semibold text-sm hover:shadow-[0_8px_32px_rgba(93,217,193,0.25)] hover:-translate-y-0.5 transition-all duration-300"
+                style={headingFont}
+              >
+                <EmailIcon />
+                Get in Touch
+              </a>
+              <a
+                href="https://linkedin.com/in/mario-vasconcelos"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full border border-white/[0.08] text-white/60 text-sm hover:text-white hover:border-white/20 hover:-translate-y-0.5 transition-all duration-300"
+              >
+                <LinkedInIcon />
+                LinkedIn
+              </a>
+              <a
+                href="https://x.com/satoshimedici"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full border border-white/[0.08] text-white/60 text-sm hover:text-white hover:border-white/20 hover:-translate-y-0.5 transition-all duration-300"
+              >
+                <XIcon />
+                @satoshimedici
+              </a>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Footer ── */}
+      <footer className="py-8 px-6 border-t border-white/[0.04]">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-white/15">
+          <span>&copy; {new Date().getFullYear()} Mario Vasconcelos</span>
+          <span>Built with Next.js, Tailwind CSS & Framer Motion</span>
         </div>
       </footer>
-
-      <style jsx>{`
-        @keyframes breathing {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.015); }
-        }
-        .animate-breathing { animation: breathing 4s ease-in-out infinite; }
-
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 0.25; }
-          50% { opacity: 0.4; }
-        }
-        .animate-pulse-slow { animation: pulse-slow 6s ease-in-out infinite; }
-      `}</style>
     </main>
   );
 }

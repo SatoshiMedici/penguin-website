@@ -1,33 +1,23 @@
 import type { Metadata } from "next";
-import { Press_Start_2P, Silkscreen } from "next/font/google";
 import "./globals.css";
 
-const pressStart2P = Press_Start_2P({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-pixel",
-});
-
-const silkscreen = Silkscreen({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-  variable: "--font-pixel-clean",
-});
-
 export const metadata: Metadata = {
-  title: "Krypto Pengus | 3,333 NFTs on Sui",
-  description: "The solitary penguin journeying toward mountains - symbolizes persistence, determination, never giving up. 3,333 unique pixel art NFTs on Sui Network.",
-  keywords: "NFT, Krypto Pengus, Sui Network, Pixel Art, Blockchain, CryptoPunks",
+  title: "Mario Vasconcelos | Digital Strategist & Business Developer",
+  description:
+    "Marketing and business development professional with 7+ years scaling communities and driving growth in tech economies. Web3, community building, and AI-powered marketing.",
+  keywords:
+    "Mario Vasconcelos, Digital Strategist, Business Developer, Web3, Community Building, Marketing, AI",
   openGraph: {
-    title: "Krypto Pengus | 3,333 NFTs on Sui",
-    description: "3,333 unique pixel art penguins. One journey. Never give up.",
+    title: "Mario Vasconcelos | Digital Strategist & Business Developer",
+    description:
+      "7+ years scaling communities and driving growth in tech economies.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Krypto Pengus",
-    description: "3,333 unique pixel art penguins on Sui Network",
-    creator: "@KryptoPengus",
+    title: "Mario Vasconcelos",
+    description: "Digital Strategist & Business Developer",
+    creator: "@satoshimedici",
   },
 };
 
@@ -37,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${pressStart2P.variable} ${silkscreen.variable}`}>
+    <html lang="en">
       <body>{children}</body>
     </html>
   );
