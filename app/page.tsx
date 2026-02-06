@@ -120,7 +120,7 @@ export default function Home() {
           HERO SECTION - Sky & Mountains
           ═══════════════════════════════════════════════════════════════ */}
       <section id="home" className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-[#87CEEB] via-[#7EC8E3] to-[#6ECFCF] overflow-hidden">
-        {/* Aurora Borealis Effect - Subtle animated gradient */}
+        {/* Aurora Borealis Effect - Animated gradient */}
         <BackgroundGradientAnimation
           gradientBackgroundStart="rgb(135, 206, 235)"
           gradientBackgroundEnd="rgb(110, 207, 207)"
@@ -128,12 +128,12 @@ export default function Home() {
           secondColor="93, 217, 193"
           thirdColor="74, 144, 164"
           fourthColor="255, 133, 51"
-          fifthColor="200, 230, 255"
+          fifthColor="180, 220, 255"
           pointerColor="93, 217, 193"
-          size="100%"
-          blendingValue="soft-light"
+          size="120%"
+          blendingValue="normal"
           interactive={false}
-          containerClassName="opacity-30"
+          containerClassName="opacity-60"
         />
 
         {/* Floating elements - smooth parallax */}
