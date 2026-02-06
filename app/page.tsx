@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import { SocialLinks } from '@/components/ui/social-links';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
+import { ZoomParallax } from '@/components/ui/zoom-parallax';
 
 // Snowflake component for reusable snow particles
 const Snowflake = ({ style, size, parallaxMultiplier, smoothMouse }: {
@@ -326,74 +327,28 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          COLLECTION SECTION - Ice Crystal Gallery
-          Background continues seamlessly (#6ECFCF → #7EC8E3)
+          COLLECTION SECTION - Zoom Parallax Gallery
+          Zooms into penguin and transitions to mint section
           ═══════════════════════════════════════════════════════════════ */}
-      <section id="collection" className="relative py-20 md:py-40 overflow-hidden bg-gradient-to-b from-[#6ECFCF] via-[#7EC8E3] to-[#87CEEB]">
-        {/* Parallax glowing orbs */}
-        <div className="absolute w-80 h-80 rounded-full bg-white/30 blur-3xl top-[30%] right-[5%]" style={{ transform: `translate(${smoothMouse.x * -20}px, ${smoothMouse.y * -20}px)` }} />
-        <div className="absolute w-96 h-96 rounded-full bg-[#5DD9C1]/20 blur-3xl top-[50%] left-[10%]" style={{ transform: `translate(${smoothMouse.x * -15}px, ${smoothMouse.y * -15}px)` }} />
-
-        {/* Snowflakes throughout section */}
-        <div className="absolute inset-0 pointer-events-none">
-          <Snowflake style={{ top: '8%', left: '18%' }} size={5} parallaxMultiplier={-40} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '15%', right: '22%' }} size={6} parallaxMultiplier={-36} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '22%', left: '45%' }} size={4} parallaxMultiplier={-44} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '30%', right: '38%' }} size={5} parallaxMultiplier={-38} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '38%', left: '10%' }} size={6} parallaxMultiplier={-42} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '45%', right: '12%' }} size={4} parallaxMultiplier={-46} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '52%', left: '30%' }} size={5} parallaxMultiplier={-34} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '60%', right: '25%' }} size={6} parallaxMultiplier={-40} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '68%', left: '55%' }} size={4} parallaxMultiplier={-38} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '75%', right: '18%' }} size={5} parallaxMultiplier={-42} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '82%', left: '15%' }} size={6} parallaxMultiplier={-36} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '88%', right: '40%' }} size={4} parallaxMultiplier={-44} smoothMouse={smoothMouse} />
+      <section id="collection" className="relative bg-gradient-to-b from-[#6ECFCF] via-[#7EC8E3] to-[#87CEEB]">
+        {/* Section Header */}
+        <div className="text-center pt-20 pb-10 relative z-10">
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 text-[#2C5F75] fade-in drop-shadow-lg">THE COLLECTION</h2>
+          <p className="text-lg md:text-xl text-[#3D6B7D] fade-in">3,333 unique pixel penguins on Sui</p>
         </div>
 
-        {/* Ice Crystal formations - positioned to avoid overlap */}
-        <div className="absolute inset-0 pointer-events-none">
-          <IceCrystal className="w-12 h-20 top-[20%] left-[3%]" parallaxMultiplier={-18} smoothMouse={smoothMouse} opacity={0.3} />
-          <IceCrystal className="w-10 h-16 top-[35%] right-[5%]" parallaxMultiplier={-22} smoothMouse={smoothMouse} opacity={0.25} />
-          <IceCrystal className="w-8 h-14 top-[50%] left-[90%]" parallaxMultiplier={-26} smoothMouse={smoothMouse} opacity={0.2} />
-          <IceCrystal className="w-10 h-18 top-[65%] left-[5%]" parallaxMultiplier={-20} smoothMouse={smoothMouse} opacity={0.28} />
-          <IceCrystal className="w-6 h-12 top-[75%] right-[8%]" parallaxMultiplier={-24} smoothMouse={smoothMouse} opacity={0.22} />
-
-          {/* Larger ice formations on sides */}
-          <svg className="absolute top-[25%] left-0 w-20 h-32 opacity-25" viewBox="0 0 50 80" style={{ transform: `translate(${smoothMouse.x * -15}px, ${smoothMouse.y * -10}px)` }}>
-            <polygon fill="#FFFFFF" points="0,40 20,0 40,40 20,80" />
-            <polygon fill="#E8F4F8" points="0,40 20,10 20,70" />
-          </svg>
-          <svg className="absolute top-[55%] right-0 w-24 h-36 opacity-28" viewBox="0 0 50 80" style={{ transform: `translate(${smoothMouse.x * -12}px, ${smoothMouse.y * -8}px)` }}>
-            <polygon fill="#FFFFFF" points="50,40 30,0 10,40 30,80" />
-            <polygon fill="#E8F4F8" points="50,40 30,10 30,70" />
-          </svg>
-        </div>
-
-        {/* Floating pixels with parallax */}
-        <div className="absolute w-5 h-5 bg-white/60 top-[20%] right-[20%]" style={{ transform: `translate(${smoothMouse.x * -38}px, ${smoothMouse.y * -38}px)` }} />
-        <div className="absolute w-4 h-4 bg-[#5DD9C1]/50 top-[50%] left-[8%]" style={{ transform: `translate(${smoothMouse.x * -30}px, ${smoothMouse.y * -30}px)` }} />
-        <div className="absolute w-6 h-6 bg-white/50 top-[70%] right-[8%]" style={{ transform: `translate(${smoothMouse.x * -25}px, ${smoothMouse.y * -25}px)` }} />
-        <div className="absolute w-5 h-5 bg-[#FF8533]/35 top-[40%] left-[15%]" style={{ transform: `translate(${smoothMouse.x * -32}px, ${smoothMouse.y * -32}px)` }} />
-
-        <div className="container mx-auto px-6 relative z-10">
-          <h2 className="text-center text-4xl md:text-6xl font-bold mb-6 text-[#2C5F75] fade-in drop-shadow-lg">THE COLLECTION</h2>
-          <p className="text-center text-lg md:text-xl text-[#3D6B7D] mb-16 md:mb-20 fade-in">3,333 unique pixel penguins on Sui</p>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 max-w-6xl mx-auto mb-16">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-              <div key={num} className="cursor-pointer fade-in aspect-square relative overflow-hidden rounded-xl border-4 border-white/60 bg-white/20 backdrop-blur-sm group hover:scale-105 hover:shadow-xl hover:shadow-[#5DD9C1]/30 transition-all duration-300">
-                <Image src={`/nft-${num}.jpg`} alt={`Krypto Pengus #${num}`} fill className="object-cover" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#2C5F75]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                  <span className="text-lg font-bold text-white">#{num}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center fade-in">
-            <button className="px-12 py-4 bg-white/80 text-[#2C5F75] font-bold rounded-xl border-2 border-[#5DD9C1] hover:bg-[#5DD9C1] hover:text-white transition-all duration-300 shadow-lg">VIEW ALL 3,333</button>
-          </div>
-        </div>
+        {/* Zoom Parallax Gallery */}
+        <ZoomParallax
+          images={[
+            { src: '/nft-1.jpg', alt: 'Krypto Pengus #1' },
+            { src: '/nft-2.jpg', alt: 'Krypto Pengus #2' },
+            { src: '/nft-3.jpg', alt: 'Krypto Pengus #3' },
+            { src: '/nft-4.jpg', alt: 'Krypto Pengus #4' },
+            { src: '/nft-5.jpg', alt: 'Krypto Pengus #5' },
+            { src: '/nft-6.jpg', alt: 'Krypto Pengus #6' },
+            { src: '/nft-7.jpg', alt: 'Krypto Pengus #7' },
+          ]}
+        />
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
