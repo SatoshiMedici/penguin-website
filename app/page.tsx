@@ -372,12 +372,12 @@ export default function Home() {
         {/* Zoom Parallax Gallery */}
         <ZoomParallax
           images={[
-            { src: '/nft-1.jpg', alt: 'Krypto Pengus NFT #1' },
-            { src: '/nft-2.jpg', alt: 'Krypto Pengus NFT #2' },
-            { src: '/nft-3.jpg', alt: 'Krypto Pengus NFT #3' },
-            { src: '/nft-4.jpg', alt: 'Krypto Pengus NFT #4' },
             { src: '/nft-5.jpg', alt: 'Krypto Pengus NFT #5' },
-            { src: '/nft-6.jpg', alt: 'Krypto Pengus NFT #6' },
+            { src: '/nft-2.jpg', alt: 'Krypto Pengus NFT #2' },
+            { src: '/nft-8.jpg', alt: 'Krypto Pengus NFT #8' },
+            { src: '/nft-1.jpg', alt: 'Krypto Pengus NFT #1' },
+            { src: '/nft-10.jpg', alt: 'Krypto Pengus NFT #10' },
+            { src: '/nft-3.jpg', alt: 'Krypto Pengus NFT #3' },
             { src: '/nft-7.jpg', alt: 'Krypto Pengus NFT #7' },
           ]}
         />
