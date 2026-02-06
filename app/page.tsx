@@ -331,63 +331,31 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════════════
           COLLECTION SECTION - Zoom Parallax Gallery
           ═══════════════════════════════════════════════════════════════ */}
-      <section id="collection" className="relative bg-gradient-to-b from-[#6ECFCF] via-[#5DD9C1] to-[#6ECFCF] overflow-hidden">
-        {/* Aurora Background Effect */}
-        <BackgroundGradientAnimation
-          gradientBackgroundStart="rgb(110, 207, 207)"
-          gradientBackgroundEnd="rgb(93, 217, 193)"
-          firstColor="93, 217, 193"
-          secondColor="135, 206, 235"
-          thirdColor="74, 144, 164"
-          fourthColor="255, 133, 51"
-          fifthColor="180, 220, 255"
-          pointerColor="93, 217, 193"
-          size="100%"
-          blendingValue="normal"
-          interactive={false}
-          containerClassName="opacity-60"
-        />
-
-        {/* Floating orbs */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute w-72 h-72 rounded-full bg-white/25 blur-3xl top-[10%] left-[5%]" style={{ transform: `translate(${smoothMouse.x * -18}px, ${smoothMouse.y * -18}px)` }} />
-          <div className="absolute w-64 h-64 rounded-full bg-[#FF8533]/15 blur-3xl top-[30%] right-[10%]" style={{ transform: `translate(${smoothMouse.x * -22}px, ${smoothMouse.y * -22}px)` }} />
-        </div>
-
-        {/* Snowflakes */}
-        <div className="absolute inset-0 pointer-events-none">
-          <Snowflake style={{ top: '5%', left: '20%' }} size={5} parallaxMultiplier={-40} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '15%', right: '25%' }} size={6} parallaxMultiplier={-35} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '25%', left: '45%' }} size={4} parallaxMultiplier={-42} smoothMouse={smoothMouse} />
-          <Snowflake style={{ top: '35%', right: '40%' }} size={5} parallaxMultiplier={-38} smoothMouse={smoothMouse} />
-        </div>
-
+      <section id="collection" className="relative bg-gradient-to-b from-[#6ECFCF] via-[#5DD9C1] to-[#6ECFCF]">
         {/* Gallery Header */}
-        <div className="text-center py-16 relative z-10">
+        <div className="text-center py-12 relative z-10">
           <h2 className="text-4xl md:text-6xl font-bold text-[#2C5F75] drop-shadow-lg fade-in">THE COLLECTION</h2>
           <p className="text-lg md:text-xl text-[#3D6B7D] mt-4 fade-in">3,333 unique pixel penguins</p>
         </div>
 
         {/* Zoom Parallax Gallery */}
-        <div className="relative z-10">
-          <ZoomParallax
-            images={[
-              { src: '/nft-5.jpg', alt: 'Krypto Pengus NFT #5' },
-              { src: '/nft-2.jpg', alt: 'Krypto Pengus NFT #2' },
-              { src: '/nft-8.jpg', alt: 'Krypto Pengus NFT #8' },
-              { src: '/nft-1.jpg', alt: 'Krypto Pengus NFT #1' },
-              { src: '/nft-10.jpg', alt: 'Krypto Pengus NFT #10' },
-              { src: '/nft-3.jpg', alt: 'Krypto Pengus NFT #3' },
-              { src: '/nft-7.jpg', alt: 'Krypto Pengus NFT #7' },
-            ]}
-          />
-        </div>
+        <ZoomParallax
+          images={[
+            { src: '/nft-5.jpg', alt: 'Krypto Pengus NFT #5' },
+            { src: '/nft-2.jpg', alt: 'Krypto Pengus NFT #2' },
+            { src: '/nft-8.jpg', alt: 'Krypto Pengus NFT #8' },
+            { src: '/nft-1.jpg', alt: 'Krypto Pengus NFT #1' },
+            { src: '/nft-10.jpg', alt: 'Krypto Pengus NFT #10' },
+            { src: '/nft-3.jpg', alt: 'Krypto Pengus NFT #3' },
+            { src: '/nft-7.jpg', alt: 'Krypto Pengus NFT #7' },
+          ]}
+        />
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
           MINT SECTION - Digital Transformation Portal
           ═══════════════════════════════════════════════════════════════ */}
-      <section id="mint" className="relative py-20 md:py-40 overflow-hidden bg-gradient-to-b from-[#6ECFCF] via-[#7EC8E3] to-[#87CEEB]">
+      <section id="mint" className="relative py-16 md:py-24 overflow-hidden bg-gradient-to-b from-[#6ECFCF] via-[#7EC8E3] to-[#87CEEB]">
         {/* Aurora Background Effect */}
         <BackgroundGradientAnimation
           gradientBackgroundStart="rgb(110, 207, 207)"

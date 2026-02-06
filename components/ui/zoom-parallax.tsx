@@ -9,7 +9,6 @@ interface Image {
 }
 
 interface ZoomParallaxProps {
-  /** Array of images to be displayed in the parallax effect max 7 images */
   images: Image[];
   className?: string;
 }
@@ -29,9 +28,21 @@ export function ZoomParallax({ images, className }: ZoomParallaxProps) {
 
   const scales = [scale4, scale5, scale6, scale5, scale6, scale8, scale9];
 
+  const getPositionClasses = (index: number) => {
+    switch (index) {
+      case 1: return '[&>div]:!-top-[30vh] [&>div]:!left-[5vw] [&>div]:!h-[30vh] [&>div]:!w-[35vw]';
+      case 2: return '[&>div]:!-top-[10vh] [&>div]:!-left-[25vw] [&>div]:!h-[45vh] [&>div]:!w-[20vw]';
+      case 3: return '[&>div]:!left-[27.5vw] [&>div]:!h-[25vh] [&>div]:!w-[25vw]';
+      case 4: return '[&>div]:!top-[27.5vh] [&>div]:!left-[5vw] [&>div]:!h-[25vh] [&>div]:!w-[20vw]';
+      case 5: return '[&>div]:!top-[27.5vh] [&>div]:!-left-[22.5vw] [&>div]:!h-[25vh] [&>div]:!w-[30vw]';
+      case 6: return '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]';
+      default: return '';
+    }
+  };
+
   return (
-    <div ref={container} className={`relative h-[300vh] ${className || ''}`}>
-      <div className="sticky top-0 h-screen overflow-hidden">
+    <div ref={container} className={`relative h-[200vh] ${className || ''}`}>
+      <div className="sticky top-0 h-screen overflow-hidden bg-gradient-to-b from-[#5DD9C1] to-[#6ECFCF]">
         {images.map(({ src, alt }, index) => {
           const scale = scales[index % scales.length];
 
@@ -39,13 +50,13 @@ export function ZoomParallax({ images, className }: ZoomParallaxProps) {
             <motion.div
               key={index}
               style={{ scale }}
-              className={`absolute top-0 flex h-full w-full items-center justify-center ${index === 1 ? '[&>div]:!-top-[30vh] [&>div]:!left-[5vw] [&>div]:!h-[30vh] [&>div]:!w-[35vw]' : ''} ${index === 2 ? '[&>div]:!-top-[10vh] [&>div]:!-left-[25vw] [&>div]:!h-[45vh] [&>div]:!w-[20vw]' : ''} ${index === 3 ? '[&>div]:!left-[27.5vw] [&>div]:!h-[25vh] [&>div]:!w-[25vw]' : ''} ${index === 4 ? '[&>div]:!top-[27.5vh] [&>div]:!left-[5vw] [&>div]:!h-[25vh] [&>div]:!w-[20vw]' : ''} ${index === 5 ? '[&>div]:!top-[27.5vh] [&>div]:!-left-[22.5vw] [&>div]:!h-[25vh] [&>div]:!w-[30vw]' : ''} ${index === 6 ? '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]' : ''} `}
+              className={`absolute top-0 flex h-full w-full items-center justify-center ${getPositionClasses(index)}`}
             >
               <div className="relative h-[25vh] w-[25vw]">
                 <img
                   src={src || '/placeholder.svg'}
                   alt={alt || `Parallax image ${index + 1}`}
-                  className="h-full w-full object-cover rounded-lg shadow-2xl"
+                  className="h-full w-full object-cover rounded-xl shadow-2xl"
                 />
               </div>
             </motion.div>
