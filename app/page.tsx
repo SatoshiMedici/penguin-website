@@ -586,7 +586,7 @@ export default function Home() {
             ]}
             className="mb-8 text-[#4A90A4]"
           />
-          <p className="text-sm text-[#87CEEB]">© 2026 Krypto Pengus. Built on Sui Network.</p>
+          <p className="text-sm text-[#87CEEB]">© 2026 Krypto Pengus.</p>
         </div>
       </footer>
 
