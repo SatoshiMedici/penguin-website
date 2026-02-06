@@ -320,7 +320,7 @@ export default function Home() {
         <div className="container mx-auto px-6 max-w-4xl text-center relative z-10">
           <h2 className="text-4xl md:text-6xl font-bold mb-16 md:mb-20 text-[#2C5F75] fade-in drop-shadow-lg">THE MARCH</h2>
 
-          <div className="space-y-8 text-lg md:text-xl text-[#1A3A4A] max-w-2xl mx-auto fade-in">
+          <div className="space-y-8 text-xl md:text-2xl text-[#1A3A4A] max-w-2xl mx-auto fade-in text-justify">
             <p>In the frozen wilderness, one penguin stands alone. Not because it is lost. Not because it is weak. But because it chose the braver path.</p>
             <p>While others huddle together for warmth, it steps forward, guided by instinct, toward the mountain that pierces the ice-grey sky. Each footprint in the snow is a decision. Each breath, a test of resolve.</p>
             <p>No two are the same. But all begin with the courage to move forward.</p>
