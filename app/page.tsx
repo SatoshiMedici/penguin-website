@@ -347,6 +347,9 @@ export default function Home() {
             { src: '/nft-5.jpg', alt: 'Krypto Pengus Limited Edition Pixel Art NFT' },
             { src: '/nft-6.jpg', alt: 'Krypto Pengus Exclusive NFT - Sui Blockchain' },
             { src: '/nft-7.jpg', alt: 'Krypto Pengus Premium Pixel Art NFT Collection' },
+            { src: '/nft-8.jpg', alt: 'Krypto Pengus Legendary Pixel Art NFT' },
+            { src: '/nft-9.jpg', alt: 'Krypto Pengus Epic NFT - Sui Network' },
+            { src: '/nft-10.jpg', alt: 'Krypto Pengus Ultra Rare Pixel Art NFT' },
           ]}
         />
       </section>
