@@ -29,20 +29,27 @@ export function ZoomParallax({ images, className }: ZoomParallaxProps) {
   const scale9 = useTransform(scrollYProgress, [0, 1], [1, 9]);
   const scale10 = useTransform(scrollYProgress, [0, 1], [1, 10]);
 
-  const scales = [scale4, scale5, scale6, scale5, scale6, scale8, scale9, scale7, scale10, scale8];
+  // Varied scales for depth - center image scales less, outer images scale more
+  const scales = [scale4, scale6, scale5, scale7, scale5, scale8, scale6, scale9, scale7, scale10];
 
-  // Positioning classes for each image
+  // Positioning classes for each image - spread out to avoid overlapping
   const getPositionClass = (index: number) => {
     switch (index) {
-      case 1: return '[&>div]:!-top-[30vh] [&>div]:!left-[5vw] [&>div]:!h-[30vh] [&>div]:!w-[35vw]';
-      case 2: return '[&>div]:!-top-[10vh] [&>div]:!-left-[25vw] [&>div]:!h-[45vh] [&>div]:!w-[20vw]';
-      case 3: return '[&>div]:!left-[27.5vw] [&>div]:!h-[25vh] [&>div]:!w-[25vw]';
-      case 4: return '[&>div]:!top-[27.5vh] [&>div]:!left-[5vw] [&>div]:!h-[25vh] [&>div]:!w-[20vw]';
-      case 5: return '[&>div]:!top-[27.5vh] [&>div]:!-left-[22.5vw] [&>div]:!h-[25vh] [&>div]:!w-[30vw]';
-      case 6: return '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]';
-      case 7: return '[&>div]:!-top-[35vh] [&>div]:!-left-[15vw] [&>div]:!h-[20vh] [&>div]:!w-[18vw]';
-      case 8: return '[&>div]:!top-[35vh] [&>div]:!left-[20vw] [&>div]:!h-[18vh] [&>div]:!w-[22vw]';
-      case 9: return '[&>div]:!-top-[25vh] [&>div]:!left-[30vw] [&>div]:!h-[22vh] [&>div]:!w-[20vw]';
+      // Center image (main focus)
+      case 0: return '[&>div]:!h-[28vh] [&>div]:!w-[28vw]';
+      // Top row - spread across
+      case 1: return '[&>div]:!-top-[32vh] [&>div]:!-left-[28vw] [&>div]:!h-[22vh] [&>div]:!w-[22vw]';
+      case 2: return '[&>div]:!-top-[35vh] [&>div]:!left-[2vw] [&>div]:!h-[20vh] [&>div]:!w-[20vw]';
+      case 3: return '[&>div]:!-top-[30vh] [&>div]:!left-[30vw] [&>div]:!h-[18vh] [&>div]:!w-[18vw]';
+      // Middle row - left and right sides
+      case 4: return '[&>div]:!top-[5vh] [&>div]:!-left-[38vw] [&>div]:!h-[20vh] [&>div]:!w-[20vw]';
+      case 5: return '[&>div]:!top-[0vh] [&>div]:!left-[38vw] [&>div]:!h-[18vh] [&>div]:!w-[18vw]';
+      // Bottom row - spread across
+      case 6: return '[&>div]:!top-[32vh] [&>div]:!-left-[30vw] [&>div]:!h-[18vh] [&>div]:!w-[18vw]';
+      case 7: return '[&>div]:!top-[35vh] [&>div]:!left-[0vw] [&>div]:!h-[16vh] [&>div]:!w-[16vw]';
+      case 8: return '[&>div]:!top-[30vh] [&>div]:!left-[28vw] [&>div]:!h-[20vh] [&>div]:!w-[20vw]';
+      // Extra corners
+      case 9: return '[&>div]:!top-[38vh] [&>div]:!left-[40vw] [&>div]:!h-[14vh] [&>div]:!w-[14vw]';
       default: return '';
     }
   };
@@ -63,7 +70,7 @@ export function ZoomParallax({ images, className }: ZoomParallaxProps) {
                 <img
                   src={src || '/placeholder.svg'}
                   alt={alt || `Parallax image ${index + 1}`}
-                  className="h-full w-full object-cover rounded-xl border-4 border-white/60 shadow-2xl"
+                  className="h-full w-full object-cover rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]"
                 />
               </div>
             </motion.div>
