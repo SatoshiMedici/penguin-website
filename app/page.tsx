@@ -340,13 +340,13 @@ export default function Home() {
         {/* Zoom Parallax Gallery */}
         <ZoomParallax
           images={[
-            { src: '/krypto-pengus-blue-hoodie-nft.png', alt: 'Krypto Pengus Blue Hoodie Pixel Art NFT' },
-            { src: '/nft-1.jpg', alt: 'Krypto Pengus Pixel Art NFT Collection' },
-            { src: '/krypto-pengus-gray-hoodie-nft.png', alt: 'Krypto Pengus Gray Hoodie Pixel Art NFT' },
-            { src: '/nft-2.jpg', alt: 'Krypto Pengus Pixel Art NFT Sui Network' },
-            { src: '/krypto-pengus-sunglasses-scarf-nft.png', alt: 'Krypto Pengus Sunglasses Scarf Pixel Art NFT' },
-            { src: '/nft-3.jpg', alt: 'Krypto Pengus Rare Pixel Art NFT' },
-            { src: '/nft-4.jpg', alt: 'Krypto Pengus Unique Pixel Art NFT' },
+            { src: '/nft-1.jpg', alt: 'Krypto Pengus Pixel Art NFT - Sui Network Collection' },
+            { src: '/nft-2.jpg', alt: 'Krypto Pengus Rare Pixel Art NFT - Digital Collectible' },
+            { src: '/nft-3.jpg', alt: 'Krypto Pengus Unique NFT - Pixel Art Penguin' },
+            { src: '/nft-4.jpg', alt: 'Krypto Pengus NFT Art - Blockchain Collectible' },
+            { src: '/nft-5.jpg', alt: 'Krypto Pengus Limited Edition Pixel Art NFT' },
+            { src: '/nft-6.jpg', alt: 'Krypto Pengus Exclusive NFT - Sui Blockchain' },
+            { src: '/nft-7.jpg', alt: 'Krypto Pengus Premium Pixel Art NFT Collection' },
           ]}
         />
       </section>
