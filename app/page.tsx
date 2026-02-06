@@ -320,7 +320,7 @@ export default function Home() {
         <div className="container mx-auto px-6 max-w-4xl text-center relative z-10">
           <h2 className="text-4xl md:text-6xl font-bold mb-16 md:mb-20 text-[#2C5F75] fade-in drop-shadow-lg">THE MARCH</h2>
 
-          <div className="space-y-10 text-lg md:text-xl text-[#1A3A4A] mb-16 md:mb-20 max-w-2xl mx-auto fade-in">
+          <div className="space-y-8 text-lg md:text-xl text-[#1A3A4A] mb-10 md:mb-12 max-w-2xl mx-auto fade-in">
             <p>In the frozen wilderness, one penguin stands alone.</p>
             <p>Not because it&apos;s lost. Not because it&apos;s weak.</p>
             <p className="flex items-center justify-center flex-wrap">
@@ -335,7 +335,7 @@ export default function Home() {
             <p>While others huddle for warmth, it marches toward the mountain.</p>
           </div>
 
-          <p className="text-[#2C5F75] font-semibold text-lg md:text-xl mb-12 fade-in">3,333 penguins. 3,333 journeys.</p>
+          <p className="text-[#2C5F75] font-semibold text-lg md:text-xl mb-6 fade-in">3,333 penguins. 3,333 journeys.</p>
           <p className="text-3xl md:text-5xl font-bold text-[#FF8533] fade-in drop-shadow-lg">Keep Waddling.</p>
         </div>
       </section>
@@ -346,7 +346,7 @@ export default function Home() {
           ═══════════════════════════════════════════════════════════════ */}
       <section id="collection" className="relative bg-gradient-to-b from-[#6ECFCF] via-[#7EC8E3] to-[#87CEEB]">
         {/* Section Header */}
-        <div className="relative flex h-[50vh] items-center justify-center">
+        <div className="relative flex h-[30vh] items-center justify-center">
           {/* Radial spotlight effect */}
           <div
             aria-hidden="true"
