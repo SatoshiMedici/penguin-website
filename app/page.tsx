@@ -323,16 +323,6 @@ export default function Home() {
           <div className="space-y-8 text-lg md:text-xl text-[#1A3A4A] mb-10 md:mb-12 max-w-2xl mx-auto fade-in">
             <p className="text-sm uppercase tracking-widest text-[#FF8533] font-semibold">Later on we will launch a line of Merch</p>
 
-            <p>In the frozen wilderness, one penguin stands alone. Not because it is lost. Not because it is weak.</p>
-            <p className="flex items-center justify-center flex-wrap">
-              <span>But because it chose the</span>
-              <FlipWords
-                words={["braver", "harder", "bolder", "colder"]}
-                duration={2500}
-                className="text-[#FF8533] font-bold"
-              />
-              <span>path.</span>
-            </p>
             <p>While others huddle together for warmth, it steps forward, guided by instinct, toward the mountain that pierces the ice-grey sky.</p>
             <p>Each footprint in the snow is a decision. Each breath, a test of resolve.</p>
           </div>
