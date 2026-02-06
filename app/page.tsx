@@ -4,8 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import { SocialLinks } from '@/components/ui/social-links';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
-import { ZoomParallax } from '@/components/ui/zoom-parallax';
-import { DottedSurface } from '@/components/ui/dotted-surface';
+import { Boxes } from '@/components/ui/background-boxes';
 
 // Snowflake component for reusable snow particles
 const Snowflake = ({ style, size, parallaxMultiplier, smoothMouse }: {
@@ -328,49 +327,44 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          COLLECTION SECTION - Zoom Parallax Gallery
-          Icy wave background with floating penguin NFTs
+          COLLECTION SECTION - Interactive Grid Gallery
+          Hover over boxes to light them up - NFTs scattered throughout
           ═══════════════════════════════════════════════════════════════ */}
       <section id="collection" className="relative">
         {/* Gradient transition from story section */}
         <div className="h-32 bg-gradient-to-b from-[#6ECFCF] to-[#1a3a4a]" />
 
-        {/* Icy ocean background with Three.js dotted wave surface */}
-        <div className="relative overflow-hidden">
-          {/* Three.js Dotted Wave Surface - Icy Theme */}
-          <DottedSurface
-            bgColor="#1a3a4a"
-            dotColor={[93, 217, 193]}
-            fogColor={0x1a3a4a}
-            className="z-0"
+        {/* Interactive grid gallery */}
+        <div className="relative h-[80vh] w-full overflow-hidden bg-[#1a3a4a] flex flex-col items-center justify-center">
+          {/* Radial mask for smooth fade effect */}
+          <div className="absolute inset-0 w-full h-full bg-[#1a3a4a] z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
+
+          {/* Interactive boxes with NFT images */}
+          <Boxes
+            images={[
+              '/nft-1.jpg',
+              '/nft-2.jpg',
+              '/nft-3.jpg',
+              '/nft-4.jpg',
+              '/nft-5.jpg',
+              '/nft-6.jpg',
+              '/nft-7.jpg',
+              '/nft-8.jpg',
+              '/nft-9.jpg',
+              '/nft-10.jpg',
+            ]}
           />
 
-          {/* Overlay gradient for depth */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#1a3a4a]/30 to-[#1a3a4a]/60 pointer-events-none z-[1]" />
-
           {/* Section Header */}
-          <div className="text-center pt-20 pb-10 relative z-10">
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white fade-in drop-shadow-[0_4px_20px_rgba(93,217,193,0.3)]">THE COLLECTION - UPDATED</h2>
-            <p className="text-lg md:text-xl text-[#5DD9C1]/80 fade-in">3,333 unique pixel penguins on Sui</p>
-          </div>
-
-          {/* Zoom Parallax Gallery */}
-          <div className="relative z-10">
-            <ZoomParallax
-              images={[
-                { src: '/nft-1.jpg', alt: 'Krypto Pengus Pixel Art NFT - Sui Network Collection' },
-                { src: '/nft-2.jpg', alt: 'Krypto Pengus Rare Pixel Art NFT - Digital Collectible' },
-                { src: '/nft-3.jpg', alt: 'Krypto Pengus Unique NFT - Pixel Art Penguin' },
-                { src: '/nft-4.jpg', alt: 'Krypto Pengus NFT Art - Blockchain Collectible' },
-                { src: '/nft-5.jpg', alt: 'Krypto Pengus Limited Edition Pixel Art NFT' },
-                { src: '/nft-6.jpg', alt: 'Krypto Pengus Exclusive NFT - Sui Blockchain' },
-                { src: '/nft-7.jpg', alt: 'Krypto Pengus Premium Pixel Art NFT Collection' },
-                { src: '/nft-8.jpg', alt: 'Krypto Pengus Legendary Pixel Art NFT' },
-                { src: '/nft-9.jpg', alt: 'Krypto Pengus Epic NFT - Sui Network' },
-                { src: '/nft-10.jpg', alt: 'Krypto Pengus Ultra Rare Pixel Art NFT' },
-              ]}
-            />
-          </div>
+          <h2 className="text-4xl md:text-6xl font-bold mb-4 text-white relative z-20 drop-shadow-[0_4px_20px_rgba(93,217,193,0.4)]">
+            THE COLLECTION
+          </h2>
+          <p className="text-lg md:text-xl text-[#5DD9C1]/80 relative z-20 text-center max-w-md">
+            3,333 unique pixel penguins on Sui
+          </p>
+          <p className="text-sm text-white/40 mt-4 relative z-20">
+            Hover to explore
+          </p>
         </div>
 
         {/* Gradient transition to mint section */}
