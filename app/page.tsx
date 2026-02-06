@@ -6,6 +6,7 @@ import Lenis from 'lenis';
 import { SocialLinks } from '@/components/ui/social-links';
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
 import { ZoomParallax } from '@/components/ui/zoom-parallax';
+import { FlipWords } from '@/components/ui/flip-words';
 
 // Snowflake component for reusable snow particles
 const Snowflake = ({ style, size, parallaxMultiplier, smoothMouse }: {
@@ -322,7 +323,15 @@ export default function Home() {
           <div className="space-y-10 text-lg md:text-xl text-[#1A3A4A] mb-16 md:mb-20 max-w-2xl mx-auto fade-in">
             <p>In the frozen wilderness, one penguin stands alone.</p>
             <p>Not because it&apos;s lost. Not because it&apos;s weak.</p>
-            <p>But because it chose the harder path.</p>
+            <p className="flex items-center justify-center flex-wrap">
+              <span>But because it chose the</span>
+              <FlipWords
+                words={["harder", "braver", "bolder", "colder"]}
+                duration={2500}
+                className="text-[#FF8533] font-bold"
+              />
+              <span>path.</span>
+            </p>
             <p>While others huddle for warmth, it marches toward the mountain.</p>
           </div>
 
