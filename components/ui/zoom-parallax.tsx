@@ -42,7 +42,7 @@ export function ZoomParallax({ images, className }: ZoomParallaxProps) {
 
   return (
     <div ref={container} className={`relative h-[200vh] ${className || ''}`}>
-      <div className="sticky top-0 h-screen overflow-hidden bg-gradient-to-b from-[#5DD9C1] to-[#6ECFCF]">
+      <div className="sticky top-0 h-screen overflow-hidden bg-gradient-to-b from-[#6ECFCF] via-[#5DD9C1] to-[#6ECFCF]">
         {images.map(({ src, alt }, index) => {
           const scale = scales[index % scales.length];
 
