@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
+import { SocialLinks } from '@/components/ui/social-links';
 
 // Snowflake component for reusable snow particles
 const Snowflake = ({ style, size, parallaxMultiplier, smoothMouse }: {
@@ -567,11 +568,26 @@ export default function Home() {
         <div className="container mx-auto px-6 text-center relative z-10">
           <div className="text-2xl md:text-3xl font-bold mb-6 text-[#2C5F75]">KRYPTO PENGUS</div>
           <p className="text-[#4A90A4] mb-8 text-lg">Never Give Up. Never Stop Marching.</p>
-          <div className="flex justify-center gap-8 mb-8 text-base">
-            <a href="https://x.com/KryptoPengus" target="_blank" rel="noopener noreferrer" className="text-[#4A90A4] hover:text-[#2C5F75] transition">X</a>
-            <a href="https://discord.gg/kryptopengus" target="_blank" rel="noopener noreferrer" className="text-[#4A90A4] hover:text-[#2C5F75] transition">Discord</a>
-            <a href="https://instagram.com/kryptopengus" target="_blank" rel="noopener noreferrer" className="text-[#4A90A4] hover:text-[#2C5F75] transition">Instagram</a>
-          </div>
+          <SocialLinks
+            socials={[
+              {
+                name: "X",
+                image: "/social/x-icon.svg",
+                href: "https://x.com/KryptoPengus",
+              },
+              {
+                name: "Discord",
+                image: "/social/discord-icon.svg",
+                href: "https://discord.gg/kryptopengus",
+              },
+              {
+                name: "Instagram",
+                image: "/social/instagram-icon.svg",
+                href: "https://instagram.com/kryptopengus",
+              },
+            ]}
+            className="mb-8 text-[#4A90A4]"
+          />
           <p className="text-sm text-[#87CEEB]">© 2026 Krypto Pengus. Built on Sui Network.</p>
         </div>
       </footer>
