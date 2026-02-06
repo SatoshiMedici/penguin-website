@@ -133,7 +133,7 @@ export default function Home() {
           size="120%"
           blendingValue="normal"
           interactive={false}
-          containerClassName="opacity-60"
+          containerClassName="opacity-80"
         />
 
         {/* Floating elements - smooth parallax */}
