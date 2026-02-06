@@ -331,31 +331,79 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════════════
           COLLECTION SECTION - Zoom Parallax Gallery
           ═══════════════════════════════════════════════════════════════ */}
-      <section id="collection" className="relative bg-gradient-to-b from-[#6ECFCF] to-[#6ECFCF]">
+      <section id="collection" className="relative bg-gradient-to-b from-[#6ECFCF] via-[#5DD9C1] to-[#6ECFCF] overflow-hidden">
+        {/* Aurora Background Effect */}
+        <BackgroundGradientAnimation
+          gradientBackgroundStart="rgb(110, 207, 207)"
+          gradientBackgroundEnd="rgb(93, 217, 193)"
+          firstColor="93, 217, 193"
+          secondColor="135, 206, 235"
+          thirdColor="74, 144, 164"
+          fourthColor="255, 133, 51"
+          fifthColor="180, 220, 255"
+          pointerColor="93, 217, 193"
+          size="100%"
+          blendingValue="normal"
+          interactive={false}
+          containerClassName="opacity-60"
+        />
+
+        {/* Floating orbs */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute w-72 h-72 rounded-full bg-white/25 blur-3xl top-[10%] left-[5%]" style={{ transform: `translate(${smoothMouse.x * -18}px, ${smoothMouse.y * -18}px)` }} />
+          <div className="absolute w-64 h-64 rounded-full bg-[#FF8533]/15 blur-3xl top-[30%] right-[10%]" style={{ transform: `translate(${smoothMouse.x * -22}px, ${smoothMouse.y * -22}px)` }} />
+        </div>
+
+        {/* Snowflakes */}
+        <div className="absolute inset-0 pointer-events-none">
+          <Snowflake style={{ top: '5%', left: '20%' }} size={5} parallaxMultiplier={-40} smoothMouse={smoothMouse} />
+          <Snowflake style={{ top: '15%', right: '25%' }} size={6} parallaxMultiplier={-35} smoothMouse={smoothMouse} />
+          <Snowflake style={{ top: '25%', left: '45%' }} size={4} parallaxMultiplier={-42} smoothMouse={smoothMouse} />
+          <Snowflake style={{ top: '35%', right: '40%' }} size={5} parallaxMultiplier={-38} smoothMouse={smoothMouse} />
+        </div>
+
         {/* Gallery Header */}
-        <div className="text-center py-16">
+        <div className="text-center py-16 relative z-10">
           <h2 className="text-4xl md:text-6xl font-bold text-[#2C5F75] drop-shadow-lg fade-in">THE COLLECTION</h2>
           <p className="text-lg md:text-xl text-[#3D6B7D] mt-4 fade-in">3,333 unique pixel penguins</p>
         </div>
 
         {/* Zoom Parallax Gallery */}
-        <ZoomParallax
-          images={[
-            { src: '/nft-5.jpg', alt: 'Krypto Pengus NFT #5' },
-            { src: '/nft-2.jpg', alt: 'Krypto Pengus NFT #2' },
-            { src: '/nft-8.jpg', alt: 'Krypto Pengus NFT #8' },
-            { src: '/nft-1.jpg', alt: 'Krypto Pengus NFT #1' },
-            { src: '/nft-10.jpg', alt: 'Krypto Pengus NFT #10' },
-            { src: '/nft-3.jpg', alt: 'Krypto Pengus NFT #3' },
-            { src: '/nft-7.jpg', alt: 'Krypto Pengus NFT #7' },
-          ]}
-        />
+        <div className="relative z-10">
+          <ZoomParallax
+            images={[
+              { src: '/nft-5.jpg', alt: 'Krypto Pengus NFT #5' },
+              { src: '/nft-2.jpg', alt: 'Krypto Pengus NFT #2' },
+              { src: '/nft-8.jpg', alt: 'Krypto Pengus NFT #8' },
+              { src: '/nft-1.jpg', alt: 'Krypto Pengus NFT #1' },
+              { src: '/nft-10.jpg', alt: 'Krypto Pengus NFT #10' },
+              { src: '/nft-3.jpg', alt: 'Krypto Pengus NFT #3' },
+              { src: '/nft-7.jpg', alt: 'Krypto Pengus NFT #7' },
+            ]}
+          />
+        </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
           MINT SECTION - Digital Transformation Portal
           ═══════════════════════════════════════════════════════════════ */}
-      <section id="mint" className="relative py-20 md:py-40 overflow-hidden bg-gradient-to-b from-[#6ECFCF] via-[#9DD5ED] to-[#A8E0F0]">
+      <section id="mint" className="relative py-20 md:py-40 overflow-hidden bg-gradient-to-b from-[#6ECFCF] via-[#7EC8E3] to-[#87CEEB]">
+        {/* Aurora Background Effect */}
+        <BackgroundGradientAnimation
+          gradientBackgroundStart="rgb(110, 207, 207)"
+          gradientBackgroundEnd="rgb(135, 206, 235)"
+          firstColor="126, 200, 227"
+          secondColor="93, 217, 193"
+          thirdColor="74, 144, 164"
+          fourthColor="255, 133, 51"
+          fifthColor="180, 220, 255"
+          pointerColor="126, 200, 227"
+          size="100%"
+          blendingValue="normal"
+          interactive={false}
+          containerClassName="opacity-50"
+        />
+
         {/* Central portal glow with parallax */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#5DD9C1]/25 rounded-full blur-3xl pointer-events-none animate-pulse-slow" style={{ transform: `translate(calc(-50% + ${smoothMouse.x * 10}px), calc(-50% + ${smoothMouse.y * 10}px))` }} />
 
@@ -447,9 +495,24 @@ export default function Home() {
 
       {/* ═══════════════════════════════════════════════════════════════
           COMMUNITY SECTION - Summit Gathering
-          Background continues seamlessly (#A8E0F0 → #B5E8F7)
           ═══════════════════════════════════════════════════════════════ */}
-      <section id="community" className="relative py-20 md:py-40 overflow-hidden bg-gradient-to-b from-[#A8E0F0] via-[#B5E8F7] to-[#C5EEF9]">
+      <section id="community" className="relative py-20 md:py-40 overflow-hidden bg-gradient-to-b from-[#87CEEB] via-[#9DD5ED] to-[#A8E0F0]">
+        {/* Aurora Background Effect */}
+        <BackgroundGradientAnimation
+          gradientBackgroundStart="rgb(135, 206, 235)"
+          gradientBackgroundEnd="rgb(168, 224, 240)"
+          firstColor="157, 213, 237"
+          secondColor="93, 217, 193"
+          thirdColor="135, 206, 235"
+          fourthColor="255, 133, 51"
+          fifthColor="180, 220, 255"
+          pointerColor="157, 213, 237"
+          size="100%"
+          blendingValue="normal"
+          interactive={false}
+          containerClassName="opacity-50"
+        />
+
         {/* Parallax orbs */}
         <div className="absolute w-96 h-96 rounded-full bg-[#FF8533]/10 blur-3xl top-[20%] right-[5%]" style={{ transform: `translate(${smoothMouse.x * -15}px, ${smoothMouse.y * -15}px)` }} />
         <div className="absolute w-80 h-80 rounded-full bg-[#5DD9C1]/15 blur-3xl top-[50%] left-[10%]" style={{ transform: `translate(${smoothMouse.x * -20}px, ${smoothMouse.y * -20}px)` }} />
