@@ -321,8 +321,6 @@ export default function Home() {
           <h2 className="text-4xl md:text-6xl font-bold mb-16 md:mb-20 text-[#2C5F75] fade-in drop-shadow-lg">THE MARCH</h2>
 
           <div className="space-y-8 text-lg md:text-xl text-[#1A3A4A] mb-10 md:mb-12 max-w-2xl mx-auto fade-in">
-            <p className="text-sm uppercase tracking-widest text-[#FF8533] font-semibold">Later on we will launch a line of Merch</p>
-
             <p>While others huddle together for warmth, it steps forward, guided by instinct, toward the mountain that pierces the ice-grey sky.</p>
             <p>Each footprint in the snow is a decision. Each breath, a test of resolve.</p>
           </div>
