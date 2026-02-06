@@ -335,44 +335,10 @@ export default function Home() {
             <p>While others huddle for warmth, it marches toward the mountain.</p>
           </div>
 
-          <p className="text-[#2C5F75] font-semibold text-lg md:text-xl mb-6 fade-in">3,333 penguins. 3,333 journeys.</p>
-          <p className="text-3xl md:text-5xl font-bold text-[#FF8533] fade-in drop-shadow-lg">Keep Waddling.</p>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          COLLECTION SECTION - Zoom Parallax Gallery
-          Scroll to zoom through the penguin collection
-          ═══════════════════════════════════════════════════════════════ */}
-      <section id="collection" className="relative bg-gradient-to-b from-[#6ECFCF] via-[#7EC8E3] to-[#87CEEB]">
-        {/* Section Header */}
-        <div className="relative flex h-[30vh] items-center justify-center">
-          {/* Radial spotlight effect */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -top-1/2 left-1/2 h-[120vmin] w-[120vmin] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.3),transparent_50%)] blur-[30px]"
-          />
-
-          {/* Floating elements */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <div className="absolute w-64 h-64 rounded-full bg-white/20 blur-3xl top-[20%] left-[10%]" style={{ transform: `translate(${smoothMouse.x * -15}px, ${smoothMouse.y * -15}px)` }} />
-            <div className="absolute w-48 h-48 rounded-full bg-[#5DD9C1]/20 blur-3xl top-[40%] right-[15%]" style={{ transform: `translate(${smoothMouse.x * -20}px, ${smoothMouse.y * -20}px)` }} />
-          </div>
-
-          <div className="text-center relative z-10">
-            <h2 className="text-4xl md:text-6xl font-bold mb-4 text-[#2C5F75] drop-shadow-lg">
-              THE COLLECTION
-            </h2>
-            <p className="text-lg md:text-xl text-[#3D6B7D] mb-4">
-              3,333 unique pixel penguins on Sui
-            </p>
-            <p className="text-sm text-[#4A90A4]">
-              Scroll to explore
-            </p>
-          </div>
+          <p className="text-[#2C5F75] font-semibold text-lg md:text-xl fade-in">3,333 penguins. 3,333 journeys.</p>
         </div>
 
-        {/* Zoom Parallax Gallery */}
+        {/* Zoom Parallax Gallery - flows directly from The March */}
         <ZoomParallax
           images={[
             { src: '/nft-5.jpg', alt: 'Krypto Pengus NFT #5' },
@@ -385,15 +351,13 @@ export default function Home() {
           ]}
         />
 
-        {/* Spacer after gallery */}
-        <div className="h-[30vh]" />
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
           MINT SECTION - Digital Transformation Portal
-          Background continues seamlessly (#87CEEB → #9DD5ED)
+          Background continues seamlessly
           ═══════════════════════════════════════════════════════════════ */}
-      <section id="mint" className="relative py-20 md:py-40 overflow-hidden bg-gradient-to-b from-[#87CEEB] via-[#9DD5ED] to-[#A8E0F0]">
+      <section id="mint" className="relative py-20 md:py-40 overflow-hidden bg-gradient-to-b from-[#6ECFCF] via-[#9DD5ED] to-[#A8E0F0]">
         {/* Central portal glow with parallax */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#5DD9C1]/25 rounded-full blur-3xl pointer-events-none animate-pulse-slow" style={{ transform: `translate(calc(-50% + ${smoothMouse.x * 10}px), calc(-50% + ${smoothMouse.y * 10}px))` }} />
 
