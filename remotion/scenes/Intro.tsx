@@ -1,6 +1,7 @@
 import React from "react";
 import {
   AbsoluteFill,
+  Audio,
   Img,
   interpolate,
   spring,
@@ -13,79 +14,93 @@ export const Intro: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Background gradient animation
-  const bgShift = interpolate(frame, [0, 150], [0, 30], {
+  // Background gradient - slow rotation
+  const bgShift = interpolate(frame, [0, 240], [0, 20], {
     extrapolateRight: "clamp",
   });
 
-  // Logo entrance spring
-  const logoScale = spring({
-    frame: frame - 10,
-    fps,
-    config: { damping: 12, stiffness: 80, mass: 0.8 },
+  // Scene fade-in
+  const sceneFade = interpolate(frame, [0, 20], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
   });
 
-  // Title entrance
+  // Hero penguin entrance (delayed, gentle spring)
+  const penguinScale = spring({
+    frame: frame - 20,
+    fps,
+    config: { damping: 18, stiffness: 40, mass: 1.2 },
+  });
+  const penguinOpacity = interpolate(frame, [20, 50], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const breathe = Math.sin(frame * 0.03) * 3;
+
+  // Title entrance (slower)
+  const titleOpacity = interpolate(frame, [60, 100], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
   const titleY = spring({
-    frame: frame - 25,
+    frame: frame - 60,
     fps,
-    config: { damping: 14, stiffness: 60 },
+    config: { damping: 20, stiffness: 30 },
   });
 
-  const titleOpacity = interpolate(frame, [25, 45], [0, 1], {
+  // Tagline entrance (even later)
+  const taglineOpacity = interpolate(frame, [110, 150], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const taglineY = interpolate(frame, [110, 150], [25, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // Tagline entrance
-  const taglineOpacity = interpolate(frame, [50, 70], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-  const taglineY = interpolate(frame, [50, 70], [30, 0], {
+  // Stats bar at bottom
+  const statsOpacity = interpolate(frame, [160, 200], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // Snowflake particles
-  const snowflakes = Array.from({ length: 20 }, (_, i) => ({
-    x: (i * 137.5) % 100,
-    delay: i * 3,
-    size: 4 + (i % 4) * 2,
-    speed: 0.3 + (i % 3) * 0.2,
+  // Snowflakes - gentler, fewer
+  const snowflakes = Array.from({ length: 15 }, (_, i) => ({
+    x: (i * 137.5 + 10) % 100,
+    delay: i * 6,
+    size: 3 + (i % 3) * 2,
   }));
 
-  // Penguin image breathing
-  const breathe = Math.sin(frame * 0.05) * 3;
-
-  // Pixel squares floating in
+  // Pixel squares - positioned to avoid content area
   const pixelSquares = [
-    { x: 15, y: 20, color: "#FF8533", delay: 5 },
-    { x: 85, y: 25, color: "#5DD9C1", delay: 10 },
-    { x: 10, y: 70, color: "#FFFFFF", delay: 15 },
-    { x: 90, y: 75, color: "#FF8533", delay: 8 },
-    { x: 25, y: 85, color: "#FFD93D", delay: 12 },
-    { x: 75, y: 15, color: "#FF6B9D", delay: 18 },
+    { x: 6, y: 12, color: "#FF8533", delay: 15 },
+    { x: 92, y: 15, color: "#5DD9C1", delay: 25 },
+    { x: 4, y: 80, color: "#FFFFFF", delay: 35 },
+    { x: 94, y: 82, color: "#FF8533", delay: 20 },
+    { x: 8, y: 50, color: "#FFD93D", delay: 30 },
+    { x: 91, y: 48, color: "#FF6B9D", delay: 40 },
   ];
 
   return (
     <AbsoluteFill
       style={{
         background: `linear-gradient(${160 + bgShift}deg, #87CEEB, #6ECFCF, #5DD9C1)`,
-        justifyContent: "center",
-        alignItems: "center",
         overflow: "hidden",
+        opacity: sceneFade,
       }}
     >
+      {/* Chime on scene start */}
+      <Audio src={staticFile("audio/chime.wav")} startFrom={0} volume={0.3} />
+
       {/* Snowflakes */}
       {snowflakes.map((flake, i) => {
         const flakeY = interpolate(
           frame,
-          [flake.delay, flake.delay + 200],
-          [-10, 110],
+          [flake.delay, flake.delay + 400],
+          [-5, 105],
           { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
         );
-        const flakeX = flake.x + Math.sin(frame * 0.02 + i) * 5;
+        const flakeX = flake.x + Math.sin(frame * 0.012 + i) * 4;
         return (
           <div
             key={i}
@@ -96,118 +111,164 @@ export const Intro: React.FC = () => {
               width: flake.size,
               height: flake.size,
               borderRadius: "50%",
-              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              backgroundColor: "rgba(255, 255, 255, 0.6)",
               filter: "blur(0.5px)",
             }}
           />
         );
       })}
 
-      {/* Floating pixel squares */}
+      {/* Floating pixel squares - far edges only */}
       {pixelSquares.map((sq, i) => {
         const sqScale = spring({
           frame: frame - sq.delay,
           fps,
-          config: { damping: 10, stiffness: 100 },
+          config: { damping: 14, stiffness: 50 },
         });
-        const sqFloat = Math.sin(frame * 0.03 + i * 2) * 8;
+        const sqFloat = Math.sin(frame * 0.02 + i * 2) * 6;
         return (
           <div
             key={i}
             style={{
               position: "absolute",
               left: `${sq.x}%`,
-              top: `${sq.y + sqFloat * 0.3}%`,
-              width: 16,
-              height: 16,
+              top: `${sq.y}%`,
+              width: 14,
+              height: 14,
               backgroundColor: sq.color,
               border: "2px solid #000",
-              transform: `scale(${sqScale}) rotate(${frame * 0.5 + i * 45}deg)`,
-              boxShadow: `0 0 12px ${sq.color}60`,
+              transform: `scale(${sqScale}) rotate(${frame * 0.3 + i * 45}deg) translateY(${sqFloat}px)`,
+              boxShadow: `0 0 10px ${sq.color}50`,
             }}
           />
         );
       })}
 
-      {/* Mountain silhouettes at bottom */}
+      {/* Mountain silhouettes */}
       <svg
-        style={{ position: "absolute", bottom: 0, width: "100%", height: "30%" }}
+        style={{
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          height: "25%",
+        }}
         viewBox="0 0 1920 300"
         preserveAspectRatio="none"
       >
         <polygon
-          points="0,300 200,80 400,180 600,50 800,150 1000,30 1200,120 1400,70 1600,160 1800,40 1920,130 1920,300"
+          points="0,300 200,100 400,190 600,70 800,160 1000,50 1200,130 1400,80 1600,170 1800,60 1920,140 1920,300"
           fill="#3D6B7D"
-          opacity={0.4}
+          opacity={0.35}
         />
         <polygon
-          points="0,300 150,140 350,200 550,120 750,200 950,100 1150,180 1350,130 1550,210 1750,90 1920,180 1920,300"
+          points="0,300 150,160 350,210 550,140 750,210 950,120 1150,190 1350,150 1550,220 1750,110 1920,190 1920,300"
           fill="#4A90A4"
-          opacity={0.5}
+          opacity={0.45}
         />
       </svg>
 
-      {/* Hero penguin image */}
+      {/* Center content - explicit positioning */}
       <div
         style={{
-          transform: `scale(${logoScale}) translateY(${breathe}px)`,
-          marginBottom: 20,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        <Img
-          src={staticFile("hero-penguin.png")}
+        {/* Hero penguin */}
+        <div
           style={{
-            width: 280,
-            height: 280,
-            borderRadius: 24,
-            border: "4px solid #000",
-            boxShadow: "0 8px 40px rgba(0,0,0,0.3)",
-          }}
-        />
-      </div>
-
-      {/* Title */}
-      <div
-        style={{
-          transform: `translateY(${interpolate(titleY, [0, 1], [40, 0])}px)`,
-          opacity: titleOpacity,
-          textAlign: "center",
-        }}
-      >
-        <h1
-          style={{
-            fontFamily: "'Press Start 2P', monospace",
-            fontSize: 72,
-            color: "#FFFFFF",
-            textShadow:
-              "4px 4px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000",
-            margin: 0,
-            letterSpacing: 4,
+            opacity: penguinOpacity,
+            transform: `scale(${penguinScale}) translateY(${breathe}px)`,
           }}
         >
-          KRYPTO PENGUS
-        </h1>
+          <Img
+            src={staticFile("hero-penguin.png")}
+            style={{
+              width: 300,
+              height: 300,
+              borderRadius: 24,
+              border: "4px solid #000",
+              boxShadow: "0 8px 40px rgba(0,0,0,0.3)",
+            }}
+          />
+        </div>
+
+        {/* Title */}
+        <div
+          style={{
+            marginTop: 30,
+            opacity: titleOpacity,
+            transform: `translateY(${interpolate(titleY, [0, 1], [30, 0])}px)`,
+            textAlign: "center",
+          }}
+        >
+          <h1
+            style={{
+              fontFamily: "'Press Start 2P', monospace",
+              fontSize: 68,
+              color: "#FFFFFF",
+              textShadow:
+                "4px 4px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000",
+              margin: 0,
+              letterSpacing: 4,
+            }}
+          >
+            KRYPTO PENGUS
+          </h1>
+        </div>
+
+        {/* Tagline */}
+        <div
+          style={{
+            marginTop: 20,
+            opacity: taglineOpacity,
+            transform: `translateY(${taglineY}px)`,
+          }}
+        >
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: 30,
+              color: "#2C5F75",
+              fontWeight: 600,
+              letterSpacing: 10,
+              textTransform: "uppercase",
+              margin: 0,
+            }}
+          >
+            Never Give Up.
+          </p>
+        </div>
       </div>
 
-      {/* Tagline */}
+      {/* Stats bar at bottom */}
       <div
         style={{
-          opacity: taglineOpacity,
-          transform: `translateY(${taglineY}px)`,
-          marginTop: 16,
+          position: "absolute",
+          bottom: 80,
+          width: "100%",
+          textAlign: "center",
+          opacity: statsOpacity,
         }}
       >
         <p
           style={{
             fontFamily: "'Space Grotesk', sans-serif",
-            fontSize: 28,
+            fontSize: 18,
             color: "#2C5F75",
-            fontWeight: 600,
-            letterSpacing: 8,
-            textTransform: "uppercase",
+            fontWeight: 500,
+            letterSpacing: 3,
+            margin: 0,
           }}
         >
-          Never Give Up.
+          3,333 unique penguins &bull; Sui Network &bull; Walrus Storage
         </p>
       </div>
     </AbsoluteFill>

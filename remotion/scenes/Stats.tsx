@@ -1,8 +1,10 @@
 import React from "react";
 import {
   AbsoluteFill,
+  Audio,
   interpolate,
   spring,
+  staticFile,
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
@@ -27,10 +29,10 @@ const StatItem: React.FC<StatItemProps> = ({
   const scale = spring({
     frame: frame - delay,
     fps,
-    config: { damping: 12, stiffness: 80 },
+    config: { damping: 16, stiffness: 50, mass: 1 },
   });
 
-  const opacity = interpolate(frame, [delay, delay + 15], [0, 1], {
+  const opacity = interpolate(frame, [delay, delay + 25], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -41,20 +43,19 @@ const StatItem: React.FC<StatItemProps> = ({
         opacity,
         transform: `scale(${scale})`,
         textAlign: "center",
-        padding: "24px 32px",
-        backgroundColor: "rgba(255,255,255,0.12)",
+        padding: "28px 36px",
+        backgroundColor: "rgba(255,255,255,0.1)",
         borderRadius: 20,
         border: `3px solid ${color}`,
-        backdropFilter: "blur(10px)",
-        minWidth: 220,
+        width: 220,
       }}
     >
       <div
         style={{
           fontFamily: "'Press Start 2P', monospace",
-          fontSize: 40,
+          fontSize: 36,
           color,
-          marginBottom: 12,
+          marginBottom: 14,
           textShadow: `0 0 20px ${color}40`,
         }}
       >
@@ -63,7 +64,7 @@ const StatItem: React.FC<StatItemProps> = ({
       <div
         style={{
           fontFamily: "'Space Grotesk', sans-serif",
-          fontSize: 18,
+          fontSize: 16,
           color: "#FFFFFF",
           fontWeight: 500,
           letterSpacing: 2,
@@ -94,57 +95,66 @@ export const Stats: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Title
-  const titleOpacity = interpolate(frame, [0, 20], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-  const titleY = interpolate(frame, [0, 20], [-30, 0], {
+  // Scene fade
+  const sceneFade = interpolate(frame, [0, 15], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // Background pulse
-  const pulse = Math.sin(frame * 0.04) * 5;
+  // Title (slower)
+  const titleOpacity = interpolate(frame, [5, 40], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const titleY = interpolate(frame, [5, 40], [-25, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  const pulse = Math.sin(frame * 0.025) * 4;
 
   return (
     <AbsoluteFill
       style={{
         background: `linear-gradient(${135 + pulse}deg, #1A5F7A, #2C5F75, #3D6B7D)`,
-        justifyContent: "center",
-        alignItems: "center",
         overflow: "hidden",
+        opacity: sceneFade,
       }}
     >
-      {/* Animated background circles */}
-      {[...Array(6)].map((_, i) => {
-        const circleX = 20 + (i * 30) % 80;
-        const circleY = 15 + (i * 25) % 70;
-        const circleSize = 100 + i * 50;
-        const circleFloat = Math.sin(frame * 0.02 + i * 1.5) * 20;
+      {/* Whoosh on entry */}
+      <Audio src={staticFile("audio/whoosh.wav")} startFrom={0} volume={0.2} />
+
+      {/* Background glow circles */}
+      {[...Array(5)].map((_, i) => {
+        const cx = 15 + i * 20;
+        const cy = 30 + (i % 3) * 20;
+        const size = 120 + i * 40;
+        const drift = Math.sin(frame * 0.015 + i * 1.2) * 15;
         return (
           <div
             key={i}
             style={{
               position: "absolute",
-              left: `${circleX}%`,
-              top: `${circleY}%`,
-              width: circleSize,
-              height: circleSize,
+              left: `${cx}%`,
+              top: `${cy}%`,
+              width: size,
+              height: size,
               borderRadius: "50%",
-              background: `radial-gradient(circle, rgba(93,217,193,0.08), transparent 70%)`,
-              transform: `translate(-50%, -50%) translateY(${circleFloat}px)`,
+              background:
+                "radial-gradient(circle, rgba(93,217,193,0.07), transparent 70%)",
+              transform: `translate(-50%, -50%) translateY(${drift}px)`,
             }}
           />
         );
       })}
 
-      {/* Title */}
+      {/* Title - fixed at top */}
       <div
         style={{
           position: "absolute",
-          top: 50,
-          width: "100%",
+          top: 60,
+          left: 0,
+          right: 0,
           textAlign: "center",
           opacity: titleOpacity,
           transform: `translateY(${titleY}px)`,
@@ -163,12 +173,13 @@ export const Stats: React.FC = () => {
         </h2>
       </div>
 
-      {/* Stats Row */}
+      {/* Stats Row - vertically centered at ~35% from top */}
       <div
         style={{
           position: "absolute",
-          top: 160,
-          width: "100%",
+          top: 200,
+          left: 0,
+          right: 0,
           display: "flex",
           justifyContent: "center",
           gap: 40,
@@ -178,42 +189,82 @@ export const Stats: React.FC = () => {
           <StatItem
             key={stat.label}
             {...stat}
-            delay={15 + i * 10}
+            delay={30 + i * 15}
             frame={frame}
             fps={fps}
           />
         ))}
       </div>
 
-      {/* Tier Breakdown */}
+      {/* Divider line */}
       <div
         style={{
           position: "absolute",
-          bottom: 60,
-          width: "100%",
+          top: 440,
+          left: "10%",
+          right: "10%",
+          height: 1,
+          backgroundColor: "rgba(255,255,255,0.1)",
+        }}
+      />
+
+      {/* Tier label */}
+      <div
+        style={{
+          position: "absolute",
+          top: 470,
+          left: 0,
+          right: 0,
+          textAlign: "center",
+          opacity: interpolate(frame, [90, 120], [0, 1], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+          }),
+        }}
+      >
+        <p
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: 18,
+            color: "rgba(255,255,255,0.5)",
+            letterSpacing: 4,
+            textTransform: "uppercase",
+            margin: 0,
+          }}
+        >
+          Mint Tiers
+        </p>
+      </div>
+
+      {/* Tier Breakdown - positioned below stats with clear gap */}
+      <div
+        style={{
+          position: "absolute",
+          top: 520,
+          left: 0,
+          right: 0,
           display: "flex",
           justifyContent: "center",
           gap: 30,
         }}
       >
         {TIERS.map((tier, i) => {
-          const tierDelay = 60 + i * 12;
+          const tierDelay = 100 + i * 18;
           const tierScale = spring({
             frame: frame - tierDelay,
             fps,
-            config: { damping: 14, stiffness: 70 },
+            config: { damping: 18, stiffness: 45, mass: 1 },
           });
           const tierOpacity = interpolate(
             frame,
-            [tierDelay, tierDelay + 15],
+            [tierDelay, tierDelay + 25],
             [0, 1],
             { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
           );
 
-          // Progress bar fill animation
           const fillWidth = interpolate(
             frame,
-            [tierDelay + 15, tierDelay + 45],
+            [tierDelay + 25, tierDelay + 70],
             [0, 100],
             { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
           );
@@ -224,20 +275,20 @@ export const Stats: React.FC = () => {
               style={{
                 opacity: tierOpacity,
                 transform: `scale(${tierScale})`,
-                backgroundColor: "rgba(255,255,255,0.08)",
+                backgroundColor: "rgba(255,255,255,0.06)",
                 borderRadius: 16,
-                padding: "20px 28px",
-                border: `2px solid ${tier.color}40`,
-                minWidth: 200,
+                padding: "22px 28px",
+                border: `2px solid ${tier.color}30`,
+                width: 210,
                 textAlign: "center",
               }}
             >
               <div
                 style={{
                   fontFamily: "'Silkscreen', monospace",
-                  fontSize: 16,
+                  fontSize: 15,
                   color: tier.color,
-                  marginBottom: 8,
+                  marginBottom: 10,
                   fontWeight: 700,
                 }}
               >
@@ -246,9 +297,9 @@ export const Stats: React.FC = () => {
               <div
                 style={{
                   fontFamily: "'Press Start 2P', monospace",
-                  fontSize: 22,
+                  fontSize: 20,
                   color: "#FFFFFF",
-                  marginBottom: 6,
+                  marginBottom: 8,
                 }}
               >
                 {tier.amount}
@@ -257,18 +308,17 @@ export const Stats: React.FC = () => {
                 style={{
                   fontFamily: "'Space Grotesk', sans-serif",
                   fontSize: 14,
-                  color: "rgba(255,255,255,0.7)",
-                  marginBottom: 10,
+                  color: "rgba(255,255,255,0.6)",
+                  marginBottom: 12,
                 }}
               >
                 {tier.price}
               </div>
-              {/* Mini progress bar */}
               <div
                 style={{
                   width: "100%",
                   height: 4,
-                  backgroundColor: "rgba(255,255,255,0.1)",
+                  backgroundColor: "rgba(255,255,255,0.08)",
                   borderRadius: 2,
                   overflow: "hidden",
                 }}
@@ -285,6 +335,32 @@ export const Stats: React.FC = () => {
             </div>
           );
         })}
+      </div>
+
+      {/* Total revenue at bottom */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 60,
+          left: 0,
+          right: 0,
+          textAlign: "center",
+          opacity: interpolate(frame, [180, 210], [0, 1], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+          }),
+        }}
+      >
+        <p
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: 16,
+            color: "rgba(255,255,255,0.4)",
+            margin: 0,
+          }}
+        >
+          Total Revenue Target: 45,000 SUI &bull; Instant Reveal
+        </p>
       </div>
     </AbsoluteFill>
   );
