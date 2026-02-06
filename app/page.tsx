@@ -566,8 +566,6 @@ export default function Home() {
         </div>
 
         <div className="container mx-auto px-6 text-center relative z-10">
-          <div className="text-2xl md:text-3xl font-bold mb-6 text-[#2C5F75]">KRYPTO PENGUS</div>
-          <p className="text-[#4A90A4] mb-16 text-lg">Never Give Up. Never Stop Marching.</p>
           <SocialLinks
             socials={[
               {
@@ -586,7 +584,7 @@ export default function Home() {
                 href: "https://instagram.com/kryptopengus",
               },
             ]}
-            className="mb-8 text-[#4A90A4] pt-8"
+            className="mb-8 text-[#4A90A4]"
           />
           <p className="text-sm text-[#87CEEB]">© 2026 Krypto Pengus. Built on Sui Network.</p>
         </div>
