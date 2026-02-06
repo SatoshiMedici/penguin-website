@@ -335,12 +335,6 @@ export default function Home() {
             <p>While others huddle for warmth, it marches toward the mountain.</p>
           </div>
 
-          <div className="mb-16 md:mb-20 fade-in flex justify-center">
-            <div className="w-full max-w-2xl aspect-[3/2] bg-gradient-to-br from-[#87CEEB] to-[#4A90A4] rounded-2xl border-4 border-white/50 flex items-center justify-center shadow-2xl">
-              <div className="text-7xl md:text-9xl">🐧🏔️</div>
-            </div>
-          </div>
-
           <p className="text-[#2C5F75] font-semibold text-lg md:text-xl mb-12 fade-in">3,333 penguins. 3,333 journeys.</p>
           <p className="text-3xl md:text-5xl font-bold text-[#FF8533] fade-in drop-shadow-lg">Keep Waddling.</p>
         </div>
