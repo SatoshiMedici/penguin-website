@@ -350,7 +350,7 @@ export default function Home() {
 
           {/* Section Header */}
           <div className="text-center pt-20 pb-10 relative z-10">
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white fade-in drop-shadow-[0_4px_20px_rgba(93,217,193,0.3)]">THE COLLECTION</h2>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white fade-in drop-shadow-[0_4px_20px_rgba(93,217,193,0.3)]">THE COLLECTION - UPDATED</h2>
             <p className="text-lg md:text-xl text-[#5DD9C1]/80 fade-in">3,333 unique pixel penguins on Sui</p>
           </div>
 
