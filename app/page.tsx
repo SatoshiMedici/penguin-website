@@ -321,21 +321,24 @@ export default function Home() {
           <h2 className="text-4xl md:text-6xl font-bold mb-16 md:mb-20 text-[#2C5F75] fade-in drop-shadow-lg">THE MARCH</h2>
 
           <div className="space-y-8 text-lg md:text-xl text-[#1A3A4A] mb-10 md:mb-12 max-w-2xl mx-auto fade-in">
-            <p>In the frozen wilderness, one penguin stands alone.</p>
-            <p>Not because it&apos;s lost. Not because it&apos;s weak.</p>
+            <p className="text-sm uppercase tracking-widest text-[#FF8533] font-semibold">Later on we will launch a line of Merch</p>
+
+            <p>In the frozen wilderness, one penguin stands alone. Not because it is lost. Not because it is weak.</p>
             <p className="flex items-center justify-center flex-wrap">
               <span>But because it chose the</span>
               <FlipWords
-                words={["harder", "braver", "bolder", "colder"]}
+                words={["braver", "harder", "bolder", "colder"]}
                 duration={2500}
                 className="text-[#FF8533] font-bold"
               />
               <span>path.</span>
             </p>
-            <p>While others huddle for warmth, it marches toward the mountain.</p>
+            <p>While others huddle together for warmth, it steps forward, guided by instinct, toward the mountain that pierces the ice-grey sky.</p>
+            <p>Each footprint in the snow is a decision. Each breath, a test of resolve.</p>
           </div>
 
-          <p className="text-[#2C5F75] font-semibold text-lg md:text-xl fade-in">3,333 penguins. 3,333 journeys.</p>
+          <p className="text-[#2C5F75] font-semibold text-lg md:text-xl mb-4 fade-in">There are 3,333 penguins. And 3,333 journeys.</p>
+          <p className="text-[#1A3A4A] text-base md:text-lg fade-in">No two are the same. But all begin with the courage to move forward.</p>
         </div>
 
         {/* Zoom Parallax Gallery - flows directly from The March */}
