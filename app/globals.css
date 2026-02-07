@@ -16,6 +16,13 @@
   --font-primary: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   --font-pixel: var(--font-pixel), 'Press Start 2P', monospace;
   --font-pixel-clean: var(--font-pixel-clean), 'Silkscreen', monospace;
+  --font-geist-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-geist-mono: var(--font-geist-mono), monospace;
+  --font-geist-pixel-square: var(--font-geist-pixel-square), monospace;
+  --font-geist-pixel-grid: var(--font-geist-pixel-grid), monospace;
+  --font-geist-pixel-circle: var(--font-geist-pixel-circle), monospace;
+  --font-geist-pixel-triangle: var(--font-geist-pixel-triangle), monospace;
+  --font-geist-pixel-line: var(--font-geist-pixel-line), monospace;
   
   /* Spacing (16px base) - UPGRADED */
   --space-xs: 16px;
@@ -140,19 +147,45 @@ body {
   box-shadow: 0 12px 40px rgba(93, 217, 193, 0.3);
 }
 
-/* Typography - UPGRADED */
+/* Typography - UPGRADED with Geist Pixel */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-pixel-clean);
+  font-family: var(--font-geist-pixel-square);
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
+/* Nav logo font */
+.font-logo {
+  font-family: var(--font-geist-pixel-square);
+}
+
 /* Alternative retro pixel font */
 .font-pixel-retro {
   font-family: var(--font-pixel) !important;
   font-weight: 400;
+}
+
+/* Geist Pixel font utility classes */
+.font-pixel-square {
+  font-family: var(--font-geist-pixel-square);
+}
+
+.font-pixel-grid {
+  font-family: var(--font-geist-pixel-grid);
+}
+
+.font-pixel-circle {
+  font-family: var(--font-geist-pixel-circle);
+}
+
+.font-pixel-triangle {
+  font-family: var(--font-geist-pixel-triangle);
+}
+
+.font-pixel-line {
+  font-family: var(--font-geist-pixel-line);
 }
 
 h1 {

@@ -112,7 +112,7 @@ export default function Home() {
           : 'bg-transparent'
       }`}>
         <nav className="container mx-auto px-6 md:px-20 h-16 md:h-20 flex justify-between items-center">
-          <div className={`text-lg md:text-xl font-bold tracking-tight transition-colors duration-300 ${
+          <div className={`font-logo text-lg md:text-xl font-bold tracking-tight transition-colors duration-300 ${
             scrollY > 50 ? 'text-black' : 'text-white drop-shadow-md'
           }`}>KRYPTO PENGUS</div>
           <div className="hidden md:flex gap-10 text-base items-center">
