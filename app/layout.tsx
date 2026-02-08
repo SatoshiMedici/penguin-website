@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Press_Start_2P, Silkscreen } from "next/font/google";
+import { Press_Start_2P, Silkscreen, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
 const pressStart2P = Press_Start_2P({
@@ -12,6 +12,12 @@ const silkscreen = Silkscreen({
   weight: ["400", "700"],
   subsets: ["latin"],
   variable: "--font-pixel-clean",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  weight: ["400", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
 });
 
 export const metadata: Metadata = {
@@ -37,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${pressStart2P.variable} ${silkscreen.variable}`}>
+    <html lang="en" className={`${pressStart2P.variable} ${silkscreen.variable} ${spaceGrotesk.variable}`}>
       <body>{children}</body>
     </html>
   );
